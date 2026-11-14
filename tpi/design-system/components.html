@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sistema visual — Librería ABC</title>
+  <link rel="stylesheet" href="components.css">
+  <style>
+    .muestra-paleta { display: flex; flex-wrap: wrap; gap: var(--espacio-3); list-style: none; }
+    .muestra-paleta li { display: grid; gap: var(--espacio-1); font-size: var(--texto-sm); }
+    .muestra-paleta span { width: 4rem; height: 2.5rem; border-radius: var(--radio-sm); border: var(--borde-fino) solid var(--color-borde-suave); }
+  </style>
+</head>
+<body>
+  <header class="cabecera">
+    <div class="contenedor">
+      <p class="marca-libreria">
+        <img class="marca-imagen" src="assets/logo.png" alt="" width="397" height="402">
+        <span class="marca-nombre" data-brand-name>Librería ABC</span>
+      </p>
+      <nav class="navegacion" aria-label="Navegación principal">
+        <ul>
+          <li><a href="#" aria-current="page">Catálogo</a></li>
+          <li><a href="#">Libros</a></li>
+          <li><a href="#">Clientes</a></li>
+          <li><a href="#">Ventas</a></li>
+          <li><a href="#">Historial</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="contenedor contenido">
+    <h1>Sistema visual · Revision 1</h1>
+
+    <section class="tarjeta">
+      <h2>Paleta</h2>
+      <ul class="muestra-paleta">
+        <li><span style="background:var(--color-primario)"></span>Primario</li>
+        <li><span style="background:var(--color-primario-hover)"></span>Primario hover</li>
+        <li><span style="background:var(--color-acento)"></span>Acento (decorativo)</li>
+        <li><span style="background:var(--color-texto)"></span>Texto</li>
+        <li><span style="background:var(--color-texto-suave)"></span>Texto suave</li>
+        <li><span style="background:var(--color-fondo)"></span>Fondo</li>
+        <li><span style="background:var(--color-error)"></span>Error</li>
+        <li><span style="background:var(--color-exito)"></span>Éxito</li>
+        <li><span style="background:var(--color-foco)"></span>Foco</li>
+      </ul>
+    </section>
+
+    <form class="formulario tarjeta" role="search" onsubmit="return false">
+      <p class="campo campo--busqueda">
+        <label for="busqueda">Buscar por título</label>
+        <input type="search" id="busqueda" value="harry">
+        <button type="submit" class="boton boton--primario">Buscar</button>
+        <button type="button" class="boton boton--secundario">Limpiar</button>
+      </p>
+    </form>
+
+    <p class="estado-vacio">Cargando libros…</p>
+    <p class="estado-vacio">No hay libros en el catálogo.</p>
+    <p class="estado-vacio">No se encontraron libros para «xyz».</p>
+    <p class="mensaje mensaje--error" role="alert">No se pudo conectar con el servidor. Probá de nuevo en unos segundos.</p>
+    <p class="mensaje mensaje--error" role="alert">Ya existe un libro con ese ISBN.</p>
+    <p class="mensaje mensaje--exito" role="status">Venta n.º 3 registrada. Total: $ 68.900,00</p>
+
+    <div class="tabla-desplazable">
+      <table class="tabla">
+        <caption>Libros del catálogo · página 1</caption>
+        <thead>
+          <tr><th scope="col">Título</th><th scope="col">ISBN</th><th scope="col">Editorial</th><th scope="col">Género</th><th scope="col">Precio</th><th scope="col">Acciones</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Cien años de soledad</td><td class="celda-atomica">9780307474728</td><td>Sudamericana</td><td>Realismo Mágico</td><td class="celda-atomica">$ 24.500,00</td><td><button type="button" class="boton boton--secundario">Ver detalle</button></td></tr>
+          <tr><td>Veinte poemas de amor</td><td class="celda-atomica">9789500720349</td><td>Seix Barral</td><td>Sin clasificar</td><td class="celda-atomica">$ 15.800,00</td><td><button type="button" class="boton boton--secundario">Ver detalle</button></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <form class="formulario tarjeta" onsubmit="return false">
+      <fieldset>
+        <legend>Alta de libro</legend>
+        <p class="campo"><label for="titulo">Título</label><input id="titulo" value="Rayuela"></p>
+        <p class="campo"><label for="isbn">ISBN</label><input id="isbn" value="9788437604572"></p>
+        <p class="campo"><label for="editorial">Editorial</label><select id="editorial"><option>Alfaguara</option></select></p>
+        <p class="campo"><label for="genero">Género</label><select id="genero"><option>Sin clasificar</option></select></p>
+      </fieldset>
+      <button type="submit" class="boton boton--primario">Guardar libro</button>
+      <button type="submit" class="boton boton--primario" disabled>Confirmando venta…</button>
+    </form>
+
+    <section class="tarjeta">
+      <h2>Detalle de venta n.º 1</h2>
+      <dl class="lista-detalle">
+        <dt>Fecha</dt><dd>14/03/2026</dd>
+        <dt>Cliente</dt><dd>Martina Ferreyra</dd>
+      </dl>
+      <div class="tabla-desplazable">
+        <table class="tabla tabla--compacta">
+          <thead><tr><th scope="col">Libro</th><th scope="col">Cant.</th><th scope="col">P. unitario</th><th scope="col">Subtotal</th></tr></thead>
+          <tbody>
+            <tr><td>Don Quijote de la Mancha</td><td>2</td><td class="celda-atomica">$ 18.900,00</td><td class="celda-atomica">$ 37.800,00</td></tr>
+            <tr><td>El Hobbit</td><td>1</td><td class="celda-atomica">$ 15.900,00</td><td class="celda-atomica">$ 15.900,00</td></tr>
+          </tbody>
+          <tfoot><tr><th scope="row" colspan="3">Total</th><td class="celda-atomica">$ 53.700,00</td></tr></tfoot>
+        </table>
+      </div>
+    </section>
+  </main>
+  <script src="brand.js"></script>
+</body>
+</html>
