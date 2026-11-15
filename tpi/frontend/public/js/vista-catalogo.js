@@ -48,6 +48,15 @@ function crearFilaCatalogo(libro) {
     celda.textContent = valor.texto;
     fila.appendChild(celda);
   });
+
+  const celdaDetalle = document.createElement("td");
+  const botonDetalle = document.createElement("button");
+  botonDetalle.type = "button";
+  botonDetalle.className = "boton boton--secundario";
+  botonDetalle.textContent = "Ver detalle";
+  botonDetalle.dataset.id = libro.id;
+  celdaDetalle.appendChild(botonDetalle);
+  fila.appendChild(celdaDetalle);
   return fila;
 }
 
@@ -156,6 +165,101 @@ function mostrarError(error) {
   mostrarEstado("catalogo-estado-error");
 }
 
+/* --- Detalle ------------------------------------------------------------- */
+
+/* N\u00famero de detalle en curso: si se pide otro detalle antes de que llegue el
+   anterior, se muestra solo el \u00faltimo. Subir el n\u00famero tambi\u00e9n invalida una
+   consulta en vuelo cuando el panel se cierra. */
+let numeroDeDetalle = 0;
+
+/* \u00daltimo bot\u00f3n \u00abVer detalle\u00bb pulsado: al cerrar el panel el foco vuelve ah\u00ed. */
+let ultimoBotonDeDetalle = null;
+
+/** Oculta el panel de detalle y descarta cualquier consulta en vuelo. */
+function ocultarDetalle() {
+  numeroDeDetalle += 1;
+  document.getElementById("catalogo-detalle").hidden = true;
+}
+
+/** Muestra los datos y las autor\u00edas del libro recibido. */
+function dibujarDetalle(libro) {
+  document.getElementById("catalogo-detalle-error").hidden = true;
+  document.getElementById("catalogo-detalle-titulo-valor").textContent = libro.titulo || "";
+  document.getElementById("catalogo-detalle-isbn").textContent = libro.isbn || "";
+  document.getElementById("catalogo-detalle-precio").textContent =
+    formatearPrecio(libro.precio);
+  document.getElementById("catalogo-detalle-stock").textContent =
+    libro.stock === null || libro.stock === undefined ? "" : String(libro.stock);
+  document.getElementById("catalogo-detalle-editorial").textContent =
+    libro.editorial && libro.editorial.nombre ? libro.editorial.nombre : "";
+  document.getElementById("catalogo-detalle-genero").textContent =
+    libro.genero && libro.genero.nombre ? libro.genero.nombre : TEXTO_SIN_GENERO;
+
+  const autores = (Array.isArray(libro.autores) ? libro.autores.slice() : []).sort(
+    (a, b) => (a.orden || 0) - (b.orden || 0)
+  );
+  const lista = document.getElementById("catalogo-detalle-autores");
+  lista.replaceChildren();
+  if (autores.length === 0) {
+    const item = document.createElement("li");
+    item.textContent = "Sin autores";
+    lista.appendChild(item);
+    return;
+  }
+  autores.forEach((autor) => {
+    const item = document.createElement("li");
+    const nombre =
+      autor.autor && autor.autor.nombre ? autor.autor.nombre : "Autor desconocido";
+    item.textContent = nombre + " (" + (autor.rol || "autor") + ")";
+    lista.appendChild(item);
+  });
+}
+
+/** Deja el panel en estado de error: tabla y datos intactos; acceso al mensaje. */
+function mostrarDetalleError(error) {
+  [
+    "catalogo-detalle-titulo-valor",
+    "catalogo-detalle-isbn",
+    "catalogo-detalle-precio",
+    "catalogo-detalle-stock",
+    "catalogo-detalle-editorial",
+    "catalogo-detalle-genero"
+  ].forEach((id) => {
+    document.getElementById(id).textContent = "";
+  });
+  document.getElementById("catalogo-detalle-autores").replaceChildren();
+  const texto =
+    error && error.mensaje ? error.mensaje : "No se pudo cargar el detalle del libro.";
+  document.getElementById("catalogo-detalle-error").textContent = texto;
+  document.getElementById("catalogo-detalle-error").hidden = false;
+}
+
+/** Pide el detalle a la API y lo muestra en el panel. */
+async function alVerDetalle(boton) {
+  ultimoBotonDeDetalle = boton;
+  const id = Number(boton.dataset.id);
+  if (!Number.isFinite(id)) {
+    return;
+  }
+  const numero = ++numeroDeDetalle;
+  try {
+    const libro = await Api.get("/libros/" + id);
+    if (numero !== numeroDeDetalle) {
+      return;
+    }
+    dibujarDetalle(libro);
+  } catch (error) {
+    if (numero !== numeroDeDetalle) {
+      return;
+    }
+    mostrarDetalleError(error);
+  }
+  document.getElementById("catalogo-detalle").hidden = false;
+  document.getElementById("catalogo-detalle-titulo").focus();
+}
+
+
+
 /* --- Eventos --------------------------------------------------------------- */
 
 /** Busca el título ingresado desde la primera página. */
@@ -163,6 +267,7 @@ function alBuscar(evento) {
   evento.preventDefault();
   estadoCatalogo.titulo = document.getElementById("catalogo-busqueda").value;
   estadoCatalogo.offset = 0;
+  ocultarDetalle();
   cargarPagina();
 }
 
@@ -174,6 +279,7 @@ function alCambiarBusqueda() {
   }
   estadoCatalogo.titulo = "";
   estadoCatalogo.offset = 0;
+  ocultarDetalle();
   cargarPagina();
 }
 
@@ -183,18 +289,41 @@ function alIrAnterior() {
     return;
   }
   estadoCatalogo.offset = Math.max(0, estadoCatalogo.offset - LIMITE_POR_PAGINA);
+  ocultarDetalle();
   cargarPagina();
 }
 
 /** Avanza una página conservando el título buscado. */
 function alIrSiguiente() {
   estadoCatalogo.offset += LIMITE_POR_PAGINA;
+  ocultarDetalle();
   cargarPagina();
 }
 
 /** Repite la última consulta después de un error. */
 function alReintentar() {
   cargarPagina();
+}
+
+/** Detecta pulsaciones en «Ver detalle» navegando por delegación en el tbody. */
+function alClickEnFila(evento) {
+  const objetivo = evento.target;
+  if (!objetivo || typeof objetivo.closest !== "function") {
+    return;
+  }
+  const boton = objetivo.closest("button[data-id]");
+  if (!boton || !evento.currentTarget.contains(boton)) {
+    return;
+  }
+  alVerDetalle(boton);
+}
+
+/** Cierra el panel y devuelve el foco al botón que lo abrió. */
+function alCerrarDetalle() {
+  ocultarDetalle();
+  if (ultimoBotonDeDetalle) {
+    ultimoBotonDeDetalle.focus();
+  }
 }
 
 /** Registra los eventos y pide la primera página. */
@@ -214,6 +343,12 @@ function iniciarCatalogo() {
   document
     .getElementById("catalogo-boton-reintentar")
     .addEventListener("click", alReintentar);
+  document
+    .getElementById("catalogo-listado")
+    .addEventListener("click", alClickEnFila);
+  document
+    .getElementById("catalogo-detalle-cerrar")
+    .addEventListener("click", alCerrarDetalle);
   cargarPagina();
 }
 

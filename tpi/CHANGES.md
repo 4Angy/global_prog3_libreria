@@ -156,7 +156,7 @@ Paso │ Agente A (Catálogo y altas)      │ Agente B (Backend e infraestructu
 ---
 
 ### [C-03] `03-catalogo-detalle`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado el 2026-11-15 (`openspec/changes/archive/2026-11-15-03-catalogo-detalle`); spec sincronizada a `openspec/specs/catalogo-libros/spec.md` (requisito «Detalle con autores»)
 - **Scope**: Detalle de libro con autores, rol y orden (US-003, G-01)
   - `index.html`: columna «Detalle» y panel oculto `#catalogo-detalle` con datos, lista de autores, mensaje de error y «Cerrar detalle».
   - `vista-catalogo.js`: botón «Ver detalle» que consulta `GET /libros/{id}`; muestra título, ISBN, precio, stock, editorial, género y `autores[] {autor {id, nombre}, rol, orden}` ordenados por `orden`; «Sin autores» si la lista viene vacía.
@@ -348,11 +348,11 @@ Paso │ Agente A (Catálogo y altas)      │ Agente B (Backend e infraestructu
 | C-09 | `09-backend-alembic` | 4 — Migraciones | — | ALTO | Ej. 5 · US-009 |
 | C-10 | `10-despliegue-easypanel` | 5 — Despliegue | C-08, C-09 | ALTO | Ej. 5 · US-010 |
 
-**Cambios completados**: `C-01` y `C-02` (ambos archivados el 2026-11-15).
+**Cambios completados**: `C-01`, `C-02` y `C-03` (archivados el 2026-11-15).
 
-**Próximo change**: `C-03` (`03-catalogo-detalle`). `C-02` dejó búsqueda, paginación y estados; queda el detalle con autores.
+**Próximo change**: `C-04` (`04-alta-libros`). El catálogo ya muestra el detalle de autores; el libro se crea con al menos un autoría (rol `orden`).
 
-Para arrancar: `/opsx:propose 03-catalogo-detalle`
+Para arrancar: `/opsx:propose 04-alta-libros`
 
 ---
 
@@ -368,11 +368,11 @@ Para arrancar: `/opsx:propose 03-catalogo-detalle`
 
 ### Observaciones de estado actual (auditoría)
 
-- **`backend/test/` ya tiene 17 archivos del Parcial 2** (`.py`, `.http`, `.sql`). Ninguno de los 10 `proposal.md`/`design.md` los menciona; `backend/test/rutas.py` afirma 26 rutas y habla de un «change 04» de un ciclo anterior. C-09 debe correrlos antes de archivar para no romper el backend aprobado. (`openspec/changes/archive/` ya tiene 2 archives: C-01 y C-02.)
+- **`backend/test/` ya tiene 17 archivos del Parcial 2** (`.py`, `.http`, `.sql`). Ninguno de los 10 `proposal.md`/`design.md` los menciona; `backend/test/rutas.py` afirma 26 rutas y habla de un «change 04» de un ciclo anterior. C-09 debe correrlos antes de archivar para no romper el backend aprobado. (`openspec/changes/archive/` ya tiene 3 archives: C-01, C-02 y C-03.)
 - **`C-05` declara depender solo de C-01**, pero su tarea 1.1 carga `formato.js`, creado en C-02: la dependencia real es C-01 + C-02 (ya reflejada en este índice).
 - **`C-04` y `C-05` comparten `validaciones.js`**; el grafo y los GATES evitan ejecutarlos en paralelo.
 - **`backend/` ya existe completo** (módulos autores/clientes/editoriales/generos/health/libros/ventas, Dockerfile, README y script de semilla): ningún change debe recrearlo. El único cambio de backend es C-09.
-- **`frontend/` está en la versión del Parcial 1**, con C-01 y C-02 ya integrados: existen `js/api.js`, `js/formato.js`, `js/vista-catalogo.js`, `index.html` reescrito y `default.conf.template`; todavía faltan `Dockerfile`, `DEPLOY.md` y la migración del resto de las pantallas (`libros`, `clientes`, `ventas`, `historial`, changes C-03 a C-07).
+- **`frontend/` está en la versión del Parcial 1**, con C-01, C-02 y C-03 ya integrados: existen `js/api.js`, `js/formato.js`, `js/vista-catalogo.js`, `index.html` reescrito y `default.conf.template`; todavía faltan `Dockerfile`, `DEPLOY.md` y la migración del resto de las pantallas (`libros`, `clientes`, `ventas`, `historial`, changes C-04 a C-07).
 - **`README.md` raíz ya existe** (creado en C-01); `DEPLOY.md`, `evidencia/` y `.gitignore` raíz siguen sin crearse: los trae C-10.
 - **`openspec/changes/archive/` está vacío**: los 10 changes figuran como pendientes y ninguno puede asumirse archivado.
 - **Dependencias externas bloqueantes de C-10**: acceso al panel de Easypanel, nombre real del proyecto/servicio backend, base PostgreSQL asignada y repositorio Git accesible (SU-01 a SU-03). No se resuelven con código; requieren confirmación de la cátedra/grupo.

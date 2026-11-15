@@ -52,11 +52,34 @@
             <th scope="col">Editorial</th>
             <th scope="col">Género</th>
             <th scope="col">Precio</th>
+            <th scope="col">Detalle</th>
           </tr>
         </thead>
         <tbody id="catalogo-listado"></tbody>
       </table>
     </div>
+
+    <section id="catalogo-detalle" class="tarjeta" aria-live="polite" hidden>
+      <h2 id="catalogo-detalle-titulo" tabindex="-1">Detalle del libro</h2>
+      <dl class="lista-detalle">
+        <dt>Título</dt>
+        <dd id="catalogo-detalle-titulo-valor"></dd>
+        <dt>ISBN</dt>
+        <dd id="catalogo-detalle-isbn"></dd>
+        <dt>Precio</dt>
+        <dd id="catalogo-detalle-precio"></dd>
+        <dt>Stock</dt>
+        <dd id="catalogo-detalle-stock"></dd>
+        <dt>Editorial</dt>
+        <dd id="catalogo-detalle-editorial"></dd>
+        <dt>Género</dt>
+        <dd id="catalogo-detalle-genero"></dd>
+      </dl>
+      <p id="catalogo-detalle-autores-etiqueta" class="lista-detalle-etiqueta"><strong>Autores</strong></p>
+      <ul id="catalogo-detalle-autores"></ul>
+      <p id="catalogo-detalle-error" class="mensaje mensaje--error" role="alert" hidden></p>
+      <button type="button" id="catalogo-detalle-cerrar" class="boton boton--secundario">Cerrar detalle</button>
+    </section>
 
     <p class="paginacion">
       <button type="button" id="catalogo-boton-anterior" class="boton boton--secundario" disabled>Anterior</button>
