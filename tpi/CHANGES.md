@@ -110,7 +110,7 @@ Paso │ Agente A (Catálogo y altas)      │ Agente B (Backend e infraestructu
 ## FASE 0 — Base del frontend y servidor local
 
 ### [C-01] `01-cliente-http`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado el 2026-11-15 (`openspec/changes/archive/2026-11-15-01-cliente-http`); spec sincronizada a `openspec/specs/cliente-http/spec.md`
 - **Scope**: Cliente HTTP único y proxy Nginx de mismo origen (US-001, Ej. 1)
   - Nuevo `frontend/public/js/api.js`: `API_BASE = "/api"`, `Api.get(ruta, params)`, `Api.post(ruta, cuerpo)`, `Api.patch(ruta, cuerpo)` sobre una función interna `pedir`; la ruta se concatena sin agregar ni quitar barras.
   - `ErrorApi { estado, mensaje, esConexion }`: extrae `detail` (texto o lista de `msg` de 422), texto genérico por estado si el cuerpo no es JSON y `estado: 0 / esConexion: true` ante `fetch` rechazado.
@@ -348,9 +348,9 @@ Paso │ Agente A (Catálogo y altas)      │ Agente B (Backend e infraestructu
 | C-09 | `09-backend-alembic` | 4 — Migraciones | — | ALTO | Ej. 5 · US-009 |
 | C-10 | `10-despliegue-easypanel` | 5 — Despliegue | C-08, C-09 | ALTO | Ej. 5 · US-010 |
 
-**Primer change recomendado**: `C-01` (`01-cliente-http`). Es la base de todo el frente frontend y toca las cinco páginas una sola vez; ningún otro change puede empezar sin él.
+**Primer change recomendado**: `C-02` (`02-catalogo-listado`). `C-01` ya está archivado y dejó `api.js` + el proxy de Nginx; el catálogo es la primera pantalla que lo consume.
 
-Para arrancar: `/opsx:propose 01-cliente-http`
+Para arrancar: `/opsx:propose 02-catalogo-listado`
 
 ---
 
