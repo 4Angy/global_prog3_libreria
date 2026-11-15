@@ -347,6 +347,20 @@ fieldset { min-width: 0; }
   color: var(--color-primario-hover);
 }
 
+/* Los botones deshabilitados se distinguen y no invitan a pulsarlos */
+.boton:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* Grupo de botones de paginación del catálogo */
+.paginacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espacio-3);
+  margin: 0;
+}
+
 /* ---------------------------------------------------------------------------
    7. Tablas
    --------------------------------------------------------------------------- */

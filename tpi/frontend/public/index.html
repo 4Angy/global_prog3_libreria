@@ -26,34 +26,21 @@
   </header>
 
   <main id="contenido-principal" class="contenedor contenido">
-    <p id="mensaje-exito" class="mensaje mensaje--exito" role="status" aria-live="polite" hidden>Operación realizada correctamente.</p>
-
     <h1>Catálogo</h1>
 
     <form id="catalogo-form-busqueda" class="formulario tarjeta" role="search">
       <p class="campo campo--busqueda">
-        <label for="catalogo-criterio">Buscar por</label>
-        <select id="catalogo-criterio">
-          <option value="titulo" selected>Título</option>
-          <option value="autor">Autor</option>
-          <option value="genero">Género</option>
-          <option value="editorial">Editorial</option>
-        </select>
-        <label for="catalogo-busqueda">Buscar</label>
+        <label for="catalogo-busqueda">Buscar por título</label>
         <input type="search" id="catalogo-busqueda" name="titulo">
         <button type="submit" id="catalogo-boton-buscar" class="boton boton--primario">Buscar</button>
       </p>
-      <p class="campo campo--busqueda">
-        <label for="catalogo-precio-min">Precio desde</label>
-        <input type="number" id="catalogo-precio-min" name="precioMin" min="0" step="0.01">
-        <label for="catalogo-precio-max">Precio hasta</label>
-        <input type="number" id="catalogo-precio-max" name="precioMax" min="0" step="0.01">
-      </p>
-      <button type="button" id="catalogo-boton-quitar" class="boton boton--secundario">Quitar filtros</button>
     </form>
 
+    <p id="catalogo-estado-cargando" class="estado-vacio" role="status" aria-live="polite" hidden>Cargando…</p>
+    <p id="catalogo-estado-error" class="mensaje mensaje--error" role="alert" hidden><span id="catalogo-error-texto">No se pudo cargar el catálogo.</span> <button type="button" id="catalogo-boton-reintentar" class="boton boton--secundario">Reintentar</button></p>
     <p id="catalogo-estado-vacio" class="estado-vacio" hidden>No hay libros en el catálogo.</p>
     <p id="catalogo-estado-sin-resultados" class="estado-vacio" hidden>No se encontraron libros para la búsqueda.</p>
+    <p id="catalogo-estado-sin-mas" class="estado-vacio" hidden>No hay más resultados.</p>
 
     <div class="tabla-desplazable">
       <table id="catalogo-tabla" class="tabla">
@@ -64,20 +51,21 @@
             <th scope="col">ISBN</th>
             <th scope="col">Editorial</th>
             <th scope="col">Género</th>
-            <th scope="col">Autores</th>
             <th scope="col">Precio</th>
           </tr>
         </thead>
         <tbody id="catalogo-listado"></tbody>
       </table>
     </div>
+
+    <p class="paginacion">
+      <button type="button" id="catalogo-boton-anterior" class="boton boton--secundario" disabled>Anterior</button>
+      <button type="button" id="catalogo-boton-siguiente" class="boton boton--secundario" disabled>Siguiente</button>
+    </p>
   </main>
 
+  <script src="js/formato.js"></script>
   <script src="js/api.js"></script>
-  <script src="js/datos-iniciales.js"></script>
-  <script src="js/persistencia.js"></script>
-  <script src="js/datos.js"></script>
-  <script src="js/catalogo.js"></script>
-  <script src="js/inicio.js"></script>
+  <script src="js/vista-catalogo.js"></script>
 </body>
 </html>

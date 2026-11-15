@@ -146,7 +146,7 @@ Con PostgreSQL, el backend y Nginx en marcha:
 | Backend y base listos | <http://127.0.0.1:8000/health/ready> | 200 `{"estado":"listo","base":"disponible"}` |
 | Proxy de Nginx hacia la API | <http://127.0.0.1:8080/api/health/ready> | 200 `{"estado":"listo","base":"disponible"}` |
 | Listado de libros por el proxy | <http://127.0.0.1:8080/api/libros/> | 200 con la lista de libros |
-| Página del catálogo | <http://127.0.0.1:8080/> | El catálogo del Parcial 1, sin errores en la consola |
+| Página del catálogo | <http://127.0.0.1:8080/> | El catálogo con los libros de la API, sin errores en la consola |
 
 Si `/health/ready` responde 503, el backend está vivo pero no llega a la base:
 revisá `DATABASE_URL` y que el contenedor `pg-libreria` esté corriendo.
@@ -154,6 +154,18 @@ revisá `DATABASE_URL` y que el contenedor `pg-libreria` esté corriendo.
 Si `/api/health/ready` responde 502, Nginx está sirviendo las páginas pero no
 encuentra el backend: revisá que `uvicorn` escuche en `:8000` y que
 `API_UPSTREAM` apunte a ese puerto.
+
+## Catálogo: búsqueda y filtros
+
+El catálogo (`frontend/public/index.html`) consulta `GET /libros/` con
+`limit=20`, `offset` y, cuando hay texto, `titulo`. La búsqueda es por
+coincidencia parcial del título y no distingue mayúsculas: el filtro lo
+resuelve la API con `ilike`.
+
+Se quitaron el selector de criterio (autor, género, editorial) y el rango de
+precio del Parcial 1. La API solo filtra por `titulo` y `genero_id`, y filtrar
+en el navegador sobre una página de 20 libros devolvería resultados
+incompletos.
 
 ## Uso del cliente HTTP en la consola
 
@@ -171,6 +183,7 @@ Los errores son siempre `ErrorApi` y traen `estado` (código HTTP), `mensaje`
 
 ## Estado del change
 
-Este README corresponde al change `01-cliente-http`: deja el cliente HTTP y el
-proxy listos. Las pantallas siguen usando `localStorage` hasta que los changes
-`02` a `07` migren cada una a la API.
+Este README corresponde a los changes `01-cliente-http` y
+`02-catalogo-listado`: deja el cliente HTTP, el proxy y el catálogo integrado a
+la API. Las demás pantallas (Libros, Clientes, Ventas e Historial) siguen usando
+`localStorage` hasta que los changes `03` a `07` migren cada una a la API.

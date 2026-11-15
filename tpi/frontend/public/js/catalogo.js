@@ -9,13 +9,11 @@
    Script clásico (no módulo ES): los `import` desde `file://` están bloqueados
    por la política de origen de Chrome y Edge, y el parcial debe funcionar
    abriendo los archivos directamente, sin servidor.
+
+   Usa `formatearPrecio` y `TEXTO_SIN_GENERO` de formato.js, que se carga antes.
    ========================================================================== */
 
 "use strict";
-
-/* Texto que se muestra cuando el libro no tiene género asignado.
-   Es el mismo texto que el HTML ya usa para ese caso. */
-const TEXTO_SIN_GENERO = "Sin clasificar";
 
 /* --- Renderizado ----------------------------------------------------------- */
 
@@ -52,12 +50,6 @@ function crearFilaLibro(libro) {
 }
 
 /** Presenta un importe con dos decimales y formato local. */
-function formatearPrecio(precio) {
-  return new Intl.NumberFormat("es-AR", {
-    style: "currency",
-    currency: "ARS"
-  }).format(precio);
-}
 
 /* --- Filtro ---------------------------------------------------------------- */
 

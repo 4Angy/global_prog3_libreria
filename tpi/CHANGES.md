@@ -134,7 +134,7 @@ Paso │ Agente A (Catálogo y altas)      │ Agente B (Backend e infraestructu
 ## FASE 1 — Catálogo (Ej. 1)
 
 ### [C-02] `02-catalogo-listado`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado el 2026-11-15 (`openspec/changes/archive/2026-11-15-02-catalogo-listado`); spec sincronizada a `openspec/specs/catalogo-libros/spec.md`
 - **Scope**: Listado, búsqueda y paginación del catálogo contra la API (US-002, G-01)
   - Nuevo `frontend/public/js/formato.js`: `formatearPrecio` (acepta número o texto decimal, formato `es-AR`/ARS) y `TEXTO_SIN_GENERO`; se quitan de `catalogo.js` y se carga primero en las otras cuatro páginas.
   - Nuevo `frontend/public/js/vista-catalogo.js` con estado `{ titulo, offset, limit: 20 }` y descarte de respuestas viejas por número de petición.
@@ -348,9 +348,11 @@ Paso │ Agente A (Catálogo y altas)      │ Agente B (Backend e infraestructu
 | C-09 | `09-backend-alembic` | 4 — Migraciones | — | ALTO | Ej. 5 · US-009 |
 | C-10 | `10-despliegue-easypanel` | 5 — Despliegue | C-08, C-09 | ALTO | Ej. 5 · US-010 |
 
-**Primer change recomendado**: `C-02` (`02-catalogo-listado`). `C-01` ya está archivado y dejó `api.js` + el proxy de Nginx; el catálogo es la primera pantalla que lo consume.
+**Cambios completados**: `C-01` y `C-02` (ambos archivados el 2026-11-15).
 
-Para arrancar: `/opsx:propose 02-catalogo-listado`
+**Próximo change**: `C-03` (`03-catalogo-detalle`). `C-02` dejó búsqueda, paginación y estados; queda el detalle con autores.
+
+Para arrancar: `/opsx:propose 03-catalogo-detalle`
 
 ---
 
@@ -366,12 +368,12 @@ Para arrancar: `/opsx:propose 02-catalogo-listado`
 
 ### Observaciones de estado actual (auditoría)
 
-- **`backend/test/` ya tiene 17 archivos del Parcial 2** (`.py`, `.http`, `.sql`). Ninguno de los 10 `proposal.md`/`design.md` los menciona; `backend/test/rutas.py` afirma 26 rutas y habla de un «change 04» de un ciclo anterior, pero `openspec/changes/archive/` está vacío. C-09 debe correrlos antes de archivar para no romper el backend aprobado.
+- **`backend/test/` ya tiene 17 archivos del Parcial 2** (`.py`, `.http`, `.sql`). Ninguno de los 10 `proposal.md`/`design.md` los menciona; `backend/test/rutas.py` afirma 26 rutas y habla de un «change 04» de un ciclo anterior. C-09 debe correrlos antes de archivar para no romper el backend aprobado. (`openspec/changes/archive/` ya tiene 2 archives: C-01 y C-02.)
 - **`C-05` declara depender solo de C-01**, pero su tarea 1.1 carga `formato.js`, creado en C-02: la dependencia real es C-01 + C-02 (ya reflejada en este índice).
 - **`C-04` y `C-05` comparten `validaciones.js`**; el grafo y los GATES evitan ejecutarlos en paralelo.
 - **`backend/` ya existe completo** (módulos autores/clientes/editoriales/generos/health/libros/ventas, Dockerfile, README y script de semilla): ningún change debe recrearlo. El único cambio de backend es C-09.
-- **`frontend/` está en la versión del Parcial 1** (sin `api.js`, sin `formato.js`, sin `default.conf.template`, sin `Dockerfile`, logo en `public/logo.png`): consistente con C-01, C-02, C-08 pendientes.
-- **No existen** `README.md` raíz, `DEPLOY.md`, `evidencia/` ni `.gitignore` raíz: los crean C-01 y C-10.
+- **`frontend/` está en la versión del Parcial 1**, con C-01 y C-02 ya integrados: existen `js/api.js`, `js/formato.js`, `js/vista-catalogo.js`, `index.html` reescrito y `default.conf.template`; todavía faltan `Dockerfile`, `DEPLOY.md` y la migración del resto de las pantallas (`libros`, `clientes`, `ventas`, `historial`, changes C-03 a C-07).
+- **`README.md` raíz ya existe** (creado en C-01); `DEPLOY.md`, `evidencia/` y `.gitignore` raíz siguen sin crearse: los trae C-10.
 - **`openspec/changes/archive/` está vacío**: los 10 changes figuran como pendientes y ninguno puede asumirse archivado.
 - **Dependencias externas bloqueantes de C-10**: acceso al panel de Easypanel, nombre real del proyecto/servicio backend, base PostgreSQL asignada y repositorio Git accesible (SU-01 a SU-03). No se resuelven con código; requieren confirmación de la cátedra/grupo.
 - **Estado de fundación**: `.active-orchestrator-state.json` está en `version: 5` (no en v2), por lo que el contrato de estado de la skill no aplica literalmente; la sección `roadmap` se registra igual por pedido explícito del orquestador.
