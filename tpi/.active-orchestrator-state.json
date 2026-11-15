@@ -1,6 +1,6 @@
 {
   "version": 5,
-  "step": "visual-design",
+  "step": "done",
   "owner": "active-orchestrator",
   "discovery": {
     "skipped": true
@@ -37,5 +37,79 @@
     "revision": 1,
     "path": "design-system/README.md",
     "approved_at": "2026-11-14"
+  },
+  "roadmap": {
+    "created_by": "roadmap-generator",
+    "source": "CHANGES.md",
+    "changes_file": "CHANGES.md",
+    "changes": [
+      "C-01",
+      "C-02",
+      "C-03",
+      "C-04",
+      "C-05",
+      "C-06",
+      "C-07",
+      "C-08",
+      "C-09",
+      "C-10"
+    ]
+  },
+  "registry": {
+    "created_by": "skill-registry",
+    "file": ".atl/skill-registry.md"
+  },
+  "skills": {
+    "created_by": "find-skill",
+    "recommended": [
+      "fastapi/fastapi@fastapi",
+      "wshobson/agents@fastapi-templates",
+      "github/awesome-copilot@multi-stage-dockerfile",
+      "wshobson/agents@postgresql-table-design",
+      "docker/skills@docker-compose-patterns",
+      "github/awesome-copilot@postgresql-optimization",
+      "fastapi/sqlmodel@sqlmodel",
+      "aj-geddes/useful-ai-prompts@nginx-configuration",
+      "anthropics/skills@frontend-design",
+      "github/awesome-copilot@create-web-form",
+      "github/awesome-copilot@pytest-coverage",
+      "jeffallan/claude-skills@javascript-pro",
+      "aj-geddes/useful-ai-prompts@rest-api-design",
+      "docker/skills@docker-build-strategies",
+      "vercel-labs/agent-skills@web-design-guidelines",
+      "addyosmani/web-quality-skills@accessibility",
+      "mattpocock/skills@code-review"
+    ],
+    "installed": [
+      "fastapi/fastapi@fastapi",
+      "wshobson/agents@fastapi-templates",
+      "github/awesome-copilot@multi-stage-dockerfile",
+      "wshobson/agents@postgresql-table-design",
+      "docker/skills@docker-compose-patterns"
+    ]
+  },
+  "agents": {
+    "created_by": "agent-instruction",
+    "files": [
+      "AGENTS.md",
+      "CLAUDE.md"
+    ],
+    "reglas_applied": [
+      "sin-framework-ni-bundler",
+      "textContent-anti-xss",
+      "solo-api.js-para-http",
+      "api-base-mismo-origen",
+      "handlers-async",
+      "schemas-extra-forbid",
+      "no-romper-contrato-backend-parcial2",
+      "mapa-de-errores-404-409-422-503",
+      "alembic-no-create_all",
+      "backend-privado-sin-cors",
+      "env-no-versionado",
+      "backend-no-root",
+      "no-commit-sin-pedido",
+      "commits-sin-coautoria-ia",
+      "conventional-commits"
+    ]
   }
 }
