@@ -167,6 +167,36 @@ precio del Parcial 1. La API solo filtra por `titulo` y `genero_id`, y filtrar
 en el navegador sobre una página de 20 libros devolvería resultados
 incompletos.
 
+## Alta de libros: cómo se resolvieron los selectores
+
+El formulario de alta (`frontend/public/libros.html`) carga las opciones al
+abrir la página, en paralelo:
+
+- **Editorial** y **género**: `GET /editoriales/` y `GET /generos/` con
+  `limit=100` (el máximo que acepta la API). El género es opcional: la lista
+  empieza por «Sin clasificar» y siguen los géneros de la API. Si alguna de
+  las dos cargas falla, se muestra el error con un botón «Reintentar» y el
+  botón «Registrar libro» queda deshabilitado hasta que las opciones lleguen.
+  Con más de 100 editoriales o géneros la lista quedaría incompleta (no pasa
+  con los datos de prueba).
+- **Autores**: la API no expone un listado de autores, así que no hay un
+  selector múltiple ni un buscador por nombre. Cada autoría se ingresa por
+  **ID** y se verifica con `GET /autores/{id}` antes de agregarla: si existe,
+  se muestra su nombre y se suma con el rol elegido (autor, coautor,
+  traductor o ilustrador); si responde 404, se informa que el autor no existe
+  y no se agrega nada; si ya está en la lista, se informa y no se repite. El
+  orden de las autorías es su posición en la lista y se renumera al quitar
+  una.
+
+La validación del formulario (`validarLibro` en `js/validaciones.js`) exige
+título, ISBN, precio mayor que cero (hasta dos decimales), stock entero
+mayor o igual a cero, una editorial y al menos una autoría, y no consulta el
+estado local: los ISBN repetidos y las referencias inexistentes los decide la
+API (409/422) y el mensaje del servidor se muestra junto al formulario
+conservando los datos cargados. La tabla «Libros registrados en esta sesión»
+muestra los libros que devolvió el 201 del alta en esta página; el catálogo
+completo está en `index.html`.
+
 ## Uso del cliente HTTP en la consola
 
 Con las páginas servidas en `:8080`, el cliente queda disponible como global
@@ -183,7 +213,8 @@ Los errores son siempre `ErrorApi` y traen `estado` (código HTTP), `mensaje`
 
 ## Estado del change
 
-Este README corresponde a los changes `01-cliente-http` y
-`02-catalogo-listado`: deja el cliente HTTP, el proxy y el catálogo integrado a
-la API. Las demás pantallas (Libros, Clientes, Ventas e Historial) siguen usando
-`localStorage` hasta que los changes `03` a `07` migren cada una a la API.
+Este README corresponde a los changes `01-cliente-http`, `02-catalogo-listado`,
+`03-catalogo-detalle` y `04-alta-libros`: el cliente HTTP, el proxy, el
+catálogo (búsqueda, paginación y detalle) y el alta de libros integrado a la
+API. Las demás pantallas (Clientes, Ventas e Historial) siguen usando
+`localStorage` hasta que los changes `05` a `07` migren cada una a la API.

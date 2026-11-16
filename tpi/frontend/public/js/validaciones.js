@@ -1,5 +1,6 @@
 /* ============================================================================
    Librería ABC — reglas de validación
+   Change 04 · Ejercicio 2: alta de libros contra la API (sin estado local, con stock y autorías)
    Change 05 · Ejercicio 4: alta de libros y clientes
    Change 06 · Ejercicio 5: venta simulada e historial
 
@@ -81,6 +82,25 @@ function leerCantidad(texto) {
 }
 
 /**
+ * Interpreta el texto de una cantidad: devuelve el entero cuando es un entero
+ * mayor o igual a cero, y null en cualquier otro caso.
+ *
+ * Se usa para el stock: la API exige un entero >= 0. Sigue el mismo criterio
+ * de formato que leerCantidad, pero admite el cero.
+ */
+function leerStock(texto) {
+  const limpio = textoDe(texto).trim();
+  if (!EXPRESION_CANTIDAD.test(limpio)) {
+    return null;
+  }
+  const stock = Number(limpio);
+  if (!Number.isInteger(stock) || stock < 0) {
+    return null;
+  }
+  return stock;
+}
+
+/**
  * Convierte el texto de un precio en un número.
  * Devuelve null cuando el texto no es un precio admisible.
  */
@@ -130,19 +150,19 @@ function existeAutorEn(autores, idAutor) {
 /* --- Validación del alta de libro ------------------------------------------ */
 
 /**
- * Comprueba los datos de un libro contra las reglas del Ejercicio 4.
+ * Comprueba los datos de un libro contra las reglas del Ejercicio 2.
  *
  * `datos` trae lo que se leyó del formulario: título, ISBN, precio (texto),
- * editorial, género y los ids de los autores elegidos.
- * `contexto` trae las colecciones locales contra las que comparar.
+ * stock (texto), editorial, género y los ids de las autorías agregadas.
+ * El navegador no compara contra colecciones locales: los ISBN repetidos y
+ * las referencias inexistentes los decide la API.
  *
  * Devuelve `{ ok, errores }`, con un mensaje completo por cada regla
  * incumplida. Todas las reglas se evalúan: se informan todos los motivos.
  */
-function validarLibro(datos, contexto) {
-  const errores = [];
+function validarLibro(datos) {
   const valores = datos || {};
-  const conjunto = contexto || {};
+  const errores = [];
 
   if (textoDe(valores.titulo).trim() === "") {
     errores.push("Ingresá el título del libro.");
@@ -151,8 +171,6 @@ function validarLibro(datos, contexto) {
   const isbn = textoDe(valores.isbn).trim();
   if (isbn === "") {
     errores.push("Ingresá el ISBN del libro.");
-  } else if (existeIsbnEn(conjunto.libros, isbn)) {
-    errores.push("Ya existe un libro con ese ISBN.");
   }
 
   const textoPrecio = textoDe(valores.precio).trim();
@@ -167,20 +185,20 @@ function validarLibro(datos, contexto) {
     }
   }
 
-  if (!existeEditorialEn(conjunto.editoriales, valores.editorialId)) {
+  const textoStock = textoDe(valores.stock).trim();
+  if (textoStock === "") {
+    errores.push("Ingresá el stock del libro.");
+  } else if (leerStock(textoStock) === null) {
+    errores.push("El stock debe ser un entero mayor o igual a cero.");
+  }
+
+  if (textoDe(valores.editorialId).trim() === "") {
     errores.push("Elegí una editorial de la lista.");
   }
 
   const autorIds = Array.isArray(valores.autorIds) ? valores.autorIds : [];
   if (autorIds.length === 0) {
     errores.push("Elegí al menos un autor.");
-  } else if (!autorIds.every((idAutor) => existeAutorEn(conjunto.autores, idAutor))) {
-    errores.push("Uno de los autores seleccionados no existe.");
-  }
-
-  const generoId = textoDe(valores.generoId);
-  if (generoId !== "" && !existeGeneroEn(conjunto.generos, generoId)) {
-    errores.push("Elegí un género de la lista.");
   }
 
   return { ok: errores.length === 0, errores: errores };

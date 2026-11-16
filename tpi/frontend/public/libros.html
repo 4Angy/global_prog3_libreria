@@ -34,6 +34,7 @@
       <h2>Alta de libro</h2>
 
       <p id="libros-mensaje-error" class="mensaje mensaje--error" role="alert" hidden>No se pudo registrar el libro.</p>
+      <p id="libros-opciones-error" class="mensaje mensaje--error" role="alert" hidden><span id="libros-opciones-error-texto">No se pudieron cargar las opciones del formulario.</span> <button type="button" id="libros-boton-reintentar-opciones" class="boton boton--secundario">Reintentar</button></p>
 
       <form id="libros-form-alta" class="formulario" novalidate>
         <fieldset>
@@ -64,14 +65,36 @@
           </p>
 
           <p class="campo">
-            <label for="libro-autores">Autores</label>
-            <select id="libro-autores" name="autores" multiple></select>
-            <small>Podés seleccionar más de un autor. En computadora, mantené presionado Ctrl o Shift para sumar más de uno.</small>
+            <label for="libro-autor-id">ID del autor</label>
+            <input type="text" id="libro-autor-id" name="autor-id" inputmode="numeric">
+            <small>Ingresá el ID del autor y elegí su rol. Se verifica con la API antes de agregarlo.</small>
           </p>
+
+          <p class="campo">
+            <label for="libro-autor-rol">Rol</label>
+            <select id="libro-autor-rol" name="autor-rol">
+              <option value="autor" selected>Autor</option>
+              <option value="coautor">Coautor</option>
+              <option value="traductor">Traductor</option>
+              <option value="ilustrador">Ilustrador</option>
+            </select>
+          </p>
+
+          <p class="campo">
+            <button type="button" id="libros-boton-agregar-autor" class="boton boton--secundario">Buscar y agregar</button>
+          </p>
+
+          <p id="libros-autor-mensaje" class="mensaje mensaje--error" role="alert" hidden></p>
+          <ul id="libros-autorias"></ul>
 
           <p class="campo">
             <label for="libro-precio">Precio</label>
             <input type="text" id="libro-precio" name="precio" inputmode="decimal">
+          </p>
+
+          <p class="campo">
+            <label for="libro-stock">Stock</label>
+            <input type="text" id="libro-stock" name="stock" inputmode="numeric">
           </p>
         </fieldset>
 
@@ -81,13 +104,13 @@
     </section>
 
     <section class="tarjeta">
-      <h2>Libros registrados</h2>
+      <h2>Libros registrados en esta sesión</h2>
 
-      <p id="libros-estado-vacio" class="estado-vacio" hidden>No hay libros registrados.</p>
+      <p id="libros-estado-vacio" class="estado-vacio" hidden>Todavía no registraste libros en esta sesión.</p>
 
       <div class="tabla-desplazable">
         <table id="libros-tabla" class="tabla">
-          <caption>Libros registrados</caption>
+          <caption>Libros registrados en esta sesión</caption>
           <thead>
             <tr>
               <th scope="col">Título</th>
@@ -96,6 +119,7 @@
               <th scope="col">Género</th>
               <th scope="col">Autores</th>
               <th scope="col">Precio</th>
+              <th scope="col">Stock</th>
             </tr>
           </thead>
           <tbody id="libros-listado"></tbody>
@@ -106,12 +130,7 @@
 
   <script src="js/formato.js"></script>
   <script src="js/api.js"></script>
-  <script src="js/datos-iniciales.js"></script>
-  <script src="js/persistencia.js"></script>
-  <script src="js/datos.js"></script>
   <script src="js/validaciones.js"></script>
-  <script src="js/catalogo.js"></script>
-  <script src="js/altas.js"></script>
-  <script src="js/inicio.js"></script>
+  <script src="js/vista-libros.js"></script>
 </body>
 </html>
