@@ -10,7 +10,7 @@
   <header id="encabezado-sitio" class="cabecera">
     <div class="contenedor">
       <p class="marca-libreria">
-        <img class="marca-imagen" src="logo.png" alt="" width="397" height="402">
+        <img class="marca-imagen" src="img/logo.png" alt="" width="397" height="402">
         <span class="marca-nombre">Librería ABC</span>
       </p>
       <nav id="navegacion-principal" class="navegacion" aria-label="Navegación principal">
@@ -33,6 +33,8 @@
     <section class="tarjeta">
       <h2>Ventas registradas</h2>
 
+      <p id="historial-estado-cargando" class="estado-vacio" role="status" aria-live="polite" hidden>Cargando…</p>
+      <p id="historial-estado-error" class="mensaje mensaje--error" role="alert" hidden><span id="historial-error-texto">No se pudo cargar el historial.</span> <button type="button" id="historial-boton-reintentar" class="boton boton--secundario">Reintentar</button></p>
       <p id="historial-estado-vacio" class="estado-vacio" hidden>No hay ventas registradas.</p>
 
       <div class="tabla-desplazable">
@@ -42,7 +44,6 @@
             <tr>
               <th scope="col">Identificador</th>
               <th scope="col">Fecha</th>
-              <th scope="col">Cliente</th>
               <th scope="col">Total</th>
               <th scope="col">Acciones</th>
             </tr>
@@ -50,10 +51,17 @@
           <tbody id="historial-listado"></tbody>
         </table>
       </div>
+
+      <p id="historial-detalle-error" class="mensaje mensaje--error" role="alert" hidden></p>
+
+      <p class="paginacion">
+        <button type="button" id="historial-boton-anterior" class="boton boton--secundario" disabled>Anterior</button>
+        <button type="button" id="historial-boton-siguiente" class="boton boton--secundario" disabled>Siguiente</button>
+      </p>
     </section>
 
-    <section id="historial-detalle" class="tarjeta" hidden>
-      <h2>Detalle de la venta</h2>
+    <section id="historial-detalle" class="tarjeta" aria-live="polite" hidden>
+      <h2 id="historial-detalle-titulo" tabindex="-1">Detalle de la venta</h2>
 
       <dl class="lista-detalle">
         <dt>Identificador</dt>
@@ -64,6 +72,9 @@
 
         <dt>Cliente</dt>
         <dd id="historial-detalle-cliente"></dd>
+
+        <dt>Email</dt>
+        <dd id="historial-detalle-email"></dd>
 
         <dt>Total</dt>
         <dd id="historial-detalle-total"></dd>
@@ -90,11 +101,6 @@
 
   <script src="js/formato.js"></script>
   <script src="js/api.js"></script>
-  <script src="js/datos-iniciales.js"></script>
-  <script src="js/persistencia.js"></script>
-  <script src="js/datos.js"></script>
-  <script src="js/catalogo.js"></script>
-  <script src="js/historial.js"></script>
-  <script src="js/inicio.js"></script>
+  <script src="js/vista-historial.js"></script>
 </body>
 </html>

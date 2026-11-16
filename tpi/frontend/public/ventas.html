@@ -10,7 +10,7 @@
   <header id="encabezado-sitio" class="cabecera">
     <div class="contenedor">
       <p class="marca-libreria">
-        <img class="marca-imagen" src="logo.png" alt="" width="397" height="402">
+        <img class="marca-imagen" src="img/logo.png" alt="" width="397" height="402">
         <span class="marca-nombre">Librería ABC</span>
       </p>
       <nav id="navegacion-principal" class="navegacion" aria-label="Navegación principal">
@@ -30,55 +30,97 @@
 
     <h1>Ventas</h1>
 
+    <section class="tarjeta">
+      <h2>Cliente</h2>
+
+      <p id="venta-cliente-error" class="mensaje mensaje--error" role="alert" hidden></p>
+
+      <form id="venta-form-cliente" class="formulario" novalidate>
+        <fieldset>
+          <legend>Buscar cliente por ID</legend>
+
+          <p class="campo">
+            <label for="venta-cliente-id">ID del cliente</label>
+            <input type="text" id="venta-cliente-id" name="cliente-id" inputmode="numeric">
+            <small>La API no tiene un listado de clientes: ingresá el ID que mostró el alta y pulsá «Buscar».</small>
+          </p>
+
+          <button type="submit" id="venta-boton-buscar-cliente" class="boton boton--primario">Buscar</button>
+        </fieldset>
+      </form>
+
+      <div id="venta-cliente-elegido" aria-live="polite" hidden>
+        <dl class="lista-detalle">
+          <dt>Cliente elegido</dt>
+          <dd id="venta-cliente-nombre"></dd>
+        </dl>
+      </div>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Libros</h2>
+
+      <p id="venta-libro-error" class="mensaje mensaje--error" role="alert" hidden></p>
+
+      <form id="venta-form-buscar-libro" class="formulario" novalidate>
+        <fieldset>
+          <legend>Buscar libro por título</legend>
+
+          <p class="campo">
+            <label for="venta-busqueda-libro">Título</label>
+            <input type="search" id="venta-busqueda-libro" name="titulo">
+            <small>La búsqueda no distingue mayúsculas y trae hasta 10 libros.</small>
+          </p>
+
+          <button type="submit" id="venta-boton-buscar-libro" class="boton boton--primario">Buscar</button>
+        </fieldset>
+      </form>
+
+      <form id="venta-form-renglon" class="formulario" novalidate>
+        <fieldset>
+          <legend>Agregar al borrador</legend>
+
+          <p class="campo">
+            <label for="venta-libro">Libro</label>
+            <select id="venta-libro" name="libro">
+              <option value="">Buscá un libro por título</option>
+            </select>
+          </p>
+
+          <p class="campo">
+            <label for="venta-cantidad">Cantidad</label>
+            <input type="number" id="venta-cantidad" name="cantidad" value="1" min="1" step="1">
+          </p>
+
+          <button type="submit" id="venta-boton-agregar" class="boton boton--secundario">Agregar renglón</button>
+        </fieldset>
+      </form>
+    </section>
+
     <form id="ventas-form-venta" class="formulario" novalidate>
       <p id="ventas-mensaje-error" class="mensaje mensaje--error" role="alert" hidden>No se pudo registrar la venta.</p>
 
-      <fieldset>
-        <legend>Datos de la venta</legend>
-
-        <p class="campo">
-          <label for="venta-cliente">Cliente</label>
-          <select id="venta-cliente" name="cliente">
-            <option value="">Seleccioná un cliente</option>
-          </select>
-        </p>
-
-        <p class="campo">
-          <label for="venta-libro">Libro</label>
-          <select id="venta-libro" name="libro">
-            <option value="">Seleccioná un libro</option>
-          </select>
-        </p>
-
-        <p class="campo">
-          <label for="venta-cantidad">Cantidad</label>
-          <input type="number" id="venta-cantidad" name="cantidad">
-        </p>
-
-        <button type="button" id="venta-boton-agregar" class="boton boton--secundario">Agregar renglón</button>
-      </fieldset>
-
       <section class="tarjeta">
-        <h2>Resumen de la venta</h2>
+        <h2>Borrador de la venta</h2>
 
         <p id="venta-estado-vacio" class="estado-vacio" hidden>No hay renglones en la venta.</p>
 
         <div class="tabla-desplazable">
           <table id="venta-resumen-tabla" class="tabla">
-            <caption>Resumen de la venta</caption>
+            <caption>Borrador de la venta</caption>
             <thead>
               <tr>
                 <th scope="col">Libro</th>
                 <th scope="col">Cantidad</th>
-                <th scope="col">Precio unitario</th>
-                <th scope="col">Subtotal</th>
+                <th scope="col">Precio de catálogo</th>
+                <th scope="col">Subtotal estimado</th>
                 <th scope="col">Acciones</th>
               </tr>
             </thead>
             <tbody id="venta-renglones"></tbody>
             <tfoot>
               <tr>
-                <th scope="row" colspan="3">Total</th>
+                <th scope="row" colspan="3">Total estimado</th>
                 <td id="venta-total"></td>
                 <td></td>
               </tr>
@@ -89,17 +131,46 @@
 
       <button type="submit" id="venta-boton-confirmar" class="boton boton--primario">Registrar venta</button>
     </form>
+
+    <section id="venta-comprobante" class="tarjeta" aria-live="polite" hidden>
+      <h2 id="venta-comprobante-titulo" tabindex="-1">Comprobante de la venta</h2>
+
+      <dl class="lista-detalle">
+        <dt>Venta</dt>
+        <dd id="venta-comprobante-id"></dd>
+
+        <dt>Fecha</dt>
+        <dd id="venta-comprobante-fecha"></dd>
+
+        <dt>Cliente</dt>
+        <dd id="venta-comprobante-cliente"></dd>
+
+        <dt>Total</dt>
+        <dd id="venta-comprobante-total"></dd>
+      </dl>
+
+      <div class="tabla-desplazable">
+        <table class="tabla tabla--compacta">
+          <caption>Renglones registrados</caption>
+          <thead>
+            <tr>
+              <th scope="col">Libro</th>
+              <th scope="col">Cantidad</th>
+              <th scope="col">Precio unitario</th>
+              <th scope="col">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody id="venta-comprobante-renglones"></tbody>
+        </table>
+      </div>
+
+      <p><a id="venta-comprobante-enlace" href="historial.html">Ver la venta en el historial</a></p>
+    </section>
   </main>
 
   <script src="js/formato.js"></script>
   <script src="js/api.js"></script>
-  <script src="js/datos-iniciales.js"></script>
-  <script src="js/persistencia.js"></script>
-  <script src="js/datos.js"></script>
   <script src="js/validaciones.js"></script>
-  <script src="js/catalogo.js"></script>
-  <script src="js/altas.js"></script>
-  <script src="js/ventas.js"></script>
-  <script src="js/inicio.js"></script>
+  <script src="js/vista-ventas.js"></script>
 </body>
 </html>

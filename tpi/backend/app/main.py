@@ -22,7 +22,6 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
-from sqlmodel import SQLModel
 
 from app.core.config import get_settings
 from app.core.errors import ErrorDeDominio
@@ -55,8 +54,6 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.session_factory = session_factory
 
     try:
-        async with engine.begin() as conn:
-            await conn.run_sync(SQLModel.metadata.create_all)
         yield
     finally:
         await engine.dispose()

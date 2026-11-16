@@ -11,7 +11,7 @@ Además, es la última pantalla que usa el estado local, así que este change bo
 - El historial consulta `GET /ventas/` con `limit` 20 y `offset`, con «Anterior» y «Siguiente» y los estados cargando, vacío y error.
 - La tabla muestra número, fecha y total. La columna «Cliente» se quita del listado porque la API no lo incluye; se ve en el detalle.
 - «Ver detalle» consulta `GET /ventas/{id}` y muestra fecha, cliente, renglones con precio unitario y subtotal, y total, tal como los devuelve la API.
-- `historial.html?venta={id}` abre directamente el detalle de esa venta (enlace del comprobante y verificación tras recargar).
+- `historial.html?venta={id}` abre directamente el detalle de esa venta (enlace del comprobante y verificación tras recargar). Abrir un detalle desde el listado escribe `?venta={id}` en la URL y cerrarlo lo quita, para que recargar o compartir reproduzca la misma vista.
 - Se borran `datos-iniciales.js`, `persistencia.js`, `datos.js`, `inicio.js`, `catalogo.js`, `altas.js`, `ventas.js` e `historial.js`, y las funciones de `validaciones.js` que solo servían al estado local.
 
 ## Capabilities

@@ -44,11 +44,23 @@ Cada venta SHALL ofrecer «Ver detalle», que consulta `GET /ventas/{id}` y mues
 - **THEN** se informa «La venta no existe.» y el listado sigue visible
 
 ### Requirement: Apertura directa del detalle
-Si la página se abre con `?venta={id}`, la vista SHALL abrir el detalle de esa venta al cargar.
+Si la página se abre con `?venta={id}`, la vista SHALL abrir el detalle de esa venta al cargar. Al abrir un detalle desde el listado, la vista MUST reflejarlo con `?venta={id}` en la URL sin recargar; al cerrarlo, MUST quitar ese parámetro.
 
 #### Scenario: Recargar el detalle
 - **WHEN** se abre `historial.html?venta=5` y se recarga la página
 - **THEN** se muestra de nuevo el detalle de la venta 5 con los mismos importes
+
+#### Scenario: Abrir desde el listado
+- **WHEN** se pulsa «Ver detalle» en una fila del listado
+- **THEN** se muestra el detalle y la URL queda con `?venta={id}` de esa venta
+
+#### Scenario: Recargar tras abrir desde el listado
+- **WHEN** se abre un detalle desde el listado y se recarga la página
+- **THEN** se vuelve a mostrar el detalle de la misma venta
+
+#### Scenario: Cerrar el detalle
+- **WHEN** se cierra el detalle
+- **THEN** el panel se oculta y la URL deja de incluir `?venta`
 
 ### Requirement: Frontend sin estado local
 Ninguna página del frontend SHALL leer ni escribir libros, clientes o ventas en `localStorage`; todos los registros MUST provenir de la API.

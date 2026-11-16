@@ -6,8 +6,8 @@
    que cada vista no los redefina. La API serializa `precio` como texto decimal
    ("24500.00"), así que `formatearPrecio` acepta tanto números como ese texto.
 
-   Debe cargarse antes que los scripts que lo usan: catalogo.js (páginas
-   Libros, Clientes, Ventas e Historial), altas.js, ventas.js y historial.js.
+   Debe cargarse antes que las vistas que lo usan: vista-catalogo.js,
+   vista-libros.js, vista-clientes.js, vista-ventas.js y vista-historial.js.
 
    Script clásico (no módulo ES): las globales `formatearPrecio` y
    `TEXTO_SIN_GENERO` quedan disponibles para los demás scripts de la página.

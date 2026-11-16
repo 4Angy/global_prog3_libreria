@@ -6,9 +6,8 @@ El **Ejercicio 5 · Servicios en Easypanel** (20 puntos) pide publicar backend y
 
 ## What Changes
 
-- Se prepara el repositorio Git con `frontend/`, `backend/`, `README.md`, `DEPLOY.md` y `evidencia/`, y un `.gitignore` raíz que excluye `.env`, entornos virtuales y cachés.
-- Se crea el servicio `backend` en Easypanel (Build Path `/backend`, `DATABASE_URL` con `postgresql+asyncpg`, sin dominio público) y se cargan los datos de prueba.
-- Se crea el servicio `frontend` (Build Path `/frontend`, `API_UPSTREAM=<proyecto>_backend:8000`, dominio HTTPS al puerto 80).
+- Se reutiliza el proyecto y el servicio `backend` ya desplegados en Easypanel (proyecto `app_grupo3`): se actualiza su fuente al repositorio del grupo y el Build Path a `/tpi/backend`, se recrea la base PostgreSQL para dejarla limpia (o se marca con `alembic stamp head` si se conserva) y se cargan los datos de prueba.
+- Se crea o actualiza el servicio `frontend` (Build Path `/tpi/frontend`, `API_UPSTREAM=<proyecto>_backend:8000`, dominio HTTPS al puerto 80).
 - Se ejecutan los casos G-01 a G-07 desde la URL pública y se guarda la evidencia.
 - Se completan `README.md` (grupo, ejecución local, carga de datos) y `DEPLOY.md` (URL, revisión, rutas de build, puertos, proxy, variables, migraciones, carga inicial, actualización).
 - Se arma el ZIP de entrega sin `.env`, credenciales ni dependencias instaladas.

@@ -177,7 +177,7 @@ Paso │ Agente A (Catálogo y altas)      │ Agente B (Backend e infraestructu
 ## FASE 2 — Altas (Ej. 2)
 
 ### [C-04] `04-alta-libros`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado el 2026-11-16 (`openspec/changes/archive/2026-11-16-04-alta-libros`); spec sincronizada a `openspec/specs/alta-libros/spec.md`
 - **Scope**: Alta de libros con editorial, género y autorías verificadas (US-004, G-02)
   - `libros.html`: campo «Stock»; reemplazar el selector múltiple de autores por «ID del autor» + «Rol» + «Buscar y agregar» + lista de autorías; renombrar la tabla a «Libros registrados en esta sesión» con columna «Stock»; cargar `formato.js`, `api.js`, `validaciones.js` y `vista-libros.js`, sin scripts del estado local.
   - Nuevo `frontend/public/js/vista-libros.js`: `GET /editoriales/?limit=100` y `GET /generos/?limit=100` en paralelo; si falla alguno, error con «Reintentar» y botón «Registrar libro» deshabilitado.
@@ -198,7 +198,7 @@ Paso │ Agente A (Catálogo y altas)      │ Agente B (Backend e infraestructu
 ---
 
 ### [C-05] `05-alta-clientes`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado el 2026-11-16 (`openspec/changes/archive/2026-11-16-05-alta-clientes`); spec sincronizada a `openspec/specs/alta-clientes/spec.md`
 - **Scope**: Alta de clientes y búsqueda por ID (US-005, G-03)
   - `clientes.html`: tabla «Clientes registrados en esta sesión» con columna «ID»; sección «Buscar cliente por ID» con resultado y mensaje de error; cargar `formato.js`, `api.js`, `validaciones.js` y `vista-clientes.js`, sin scripts locales.
   - Nuevo `frontend/public/js/vista-clientes.js`: `POST /clientes/` con email normalizado (recorte + minúsculas) y botón deshabilitado; 201 muestra el `id`, agrega la fila y limpia el formulario.
@@ -221,7 +221,7 @@ Paso │ Agente A (Catálogo y altas)      │ Agente B (Backend e infraestructu
 ## FASE 3 — Ventas e historial (Ej. 3)
 
 ### [C-06] `06-ventas`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado el 2026-11-16 (`openspec/changes/archive/2026-11-16-06-ventas`); spec sincronizada a `openspec/specs/registro-ventas/spec.md`
 - **Scope**: Registro de venta con borrador en memoria y comprobante (US-006, G-04/G-06)
   - `ventas.html`: «ID del cliente» + «Buscar» con nombre encontrado; «Buscar libro por título» con selector de resultados; columna «Precio de catálogo» y «Total estimado» en el borrador; tarjeta de comprobante oculta; cargar `formato.js`, `api.js`, `validaciones.js` y `vista-ventas.js`.
   - Nuevo `frontend/public/js/vista-ventas.js`: reutiliza la lógica de borrador de `ventas.js` pero cada renglón guarda `{libroId, titulo, precioReferencia, cantidad}` tomado de la búsqueda, sin leer estado local.
@@ -243,12 +243,12 @@ Paso │ Agente A (Catálogo y altas)      │ Agente B (Backend e infraestructu
 ---
 
 ### [C-07] `07-historial-ventas`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado el 2026-11-16 (`openspec/changes/archive/2026-11-16-07-historial-ventas`); spec sincronizada a `openspec/specs/historial-ventas/spec.md`
 - **Scope**: Historial paginado, detalle con importes históricos y limpieza del Parcial 1 (US-007, G-04/G-05)
   - `historial.html`: quitar columna «Cliente» del listado; «Cargando…», error con «Reintentar», «Anterior»/«Siguiente»; email en el detalle; cargar `formato.js`, `api.js` y `vista-historial.js`.
   - Nuevo `frontend/public/js/vista-historial.js`: `GET /ventas/?limit=20&offset`, «Siguiente» si `recibidos === limit`; tabla con número, fecha y total.
   - Detalle con `GET /ventas/{id}`: fecha local desde ISO UTC, cliente «nombre (email)», renglones con `precio_unitario` y `subtotal`, y total formateados con `formatearPrecio` sobre los textos de la API (sin recalcular).
-  - Parámetro `?venta={id}`: si es entero positivo, abre el detalle además de cargar el listado (enlace del comprobante y verificación tras recargar).
+  - Parámetro `?venta={id}`: si es entero positivo, abre el detalle además de cargar el listado (enlace del comprobante y verificación tras recargar). Abrir un detalle desde el listado lo escribe en la URL con `replaceState`; cerrarlo lo quita.
   - Limpieza: borrar `datos-iniciales.js`, `persistencia.js`, `datos.js`, `inicio.js`, `catalogo.js`, `altas.js`, `ventas.js` e `historial.js` tras comprobar con una búsqueda que ninguna página los referencia; quitar de `validaciones.js` las funciones `existe…En`.
   - Verificación G-05: registrar venta, `PATCH /libros/{id}` con nuevo precio y comprobar que el detalle no cambia; G-04 tras recargar.
   - Sin migraciones ni cambios de backend.
@@ -268,7 +268,7 @@ Paso │ Agente A (Catálogo y altas)      │ Agente B (Backend e infraestructu
 > `C-08` depende del frente frontend; `C-09` solo del backend y **puede adelantarse al GATE 1**.
 
 ### [C-08] `08-docker-frontend`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado el 2026-11-16 (`openspec/changes/archive/2026-11-16-08-docker-frontend`); spec sincronizada a `openspec/specs/imagen-frontend/spec.md`
 - **Scope**: Imagen Nginx del frontend y verificación local del proxy (US-008)
   - Nuevo `frontend/Dockerfile` textual de la consigna: `FROM nginx:1.30-alpine`, `ENV NGINX_ENVSUBST_FILTER=^API_UPSTREAM$`, `COPY default.conf.template /etc/nginx/templates/default.conf.template`, `COPY public/ /usr/share/nginx/html/`, `EXPOSE 80`.
   - Nuevo `frontend/.dockerignore` con las entradas de la consigna.
@@ -288,7 +288,7 @@ Paso │ Agente A (Catálogo y altas)      │ Agente B (Backend e infraestructu
 ---
 
 ### [C-09] `09-backend-alembic`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[x]` archivado el 2026-11-16 (`openspec/changes/archive/2026-11-16-09-backend-alembic`); spec sincronizada a `openspec/specs/migraciones-backend/spec.md`
 - **Scope**: Versionado del esquema con Alembic y arranque del contenedor migrado (US-009)
   - `backend/requirements.txt`: agregar `alembic`; `alembic init -t async migrations`.
   - `migrations/env.py` asincrónico: `get_settings().database_url`, `import_model_modules()` y `target_metadata = SQLModel.metadata`; `alembic.ini` sin URL; agregar `import sqlmodel` al template para los tipos `AutoString`.
@@ -313,7 +313,7 @@ Paso │ Agente A (Catálogo y altas)      │ Agente B (Backend e infraestructu
 ## FASE 5 — Despliegue en producción (Ej. 5)
 
 ### [C-10] `10-despliegue-easypanel`
-- **Estado**: `[ ]` pendiente
+- **Estado**: `[ ]` pendiente — parte de código/docs lista (1.1, 4.1, 4.2); tareas 2.1, 2.2, 3.1 y 3.2 requieren Easypanel y la URL pública
 - **Scope**: Publicación de ambos servicios, evidencia G-01..G-07 y entrega (US-010)
   - `.gitignore` raíz (`.env`, `.env.*`, `.venv`, `__pycache__`, `.pytest_cache`, `node_modules`) e inicialización/subida del repo con `frontend/`, `backend/`, `README.md`, `DEPLOY.md` y `evidencia/`; verificar con `git ls-files` que no hay `.env`.
   - Servicio Easypanel `backend`: Build Path `/backend`, Dockerfile, `DATABASE_URL=postgresql+asyncpg://…`; sin dominio público; logs con `alembic upgrade head`; salud 200 desde el Shell y carga con `python scripts/datos_iniciales.py`.
@@ -348,11 +348,11 @@ Paso │ Agente A (Catálogo y altas)      │ Agente B (Backend e infraestructu
 | C-09 | `09-backend-alembic` | 4 — Migraciones | — | ALTO | Ej. 5 · US-009 |
 | C-10 | `10-despliegue-easypanel` | 5 — Despliegue | C-08, C-09 | ALTO | Ej. 5 · US-010 |
 
-**Cambios completados**: `C-01`, `C-02` y `C-03` (archivados el 2026-11-15).
+**Cambios completados**: `C-01` a `C-09` archivados (`C-01`–`C-03` el 2026-11-15; `C-04`–`C-09` el 2026-11-16). `C-10` tiene la parte de código y documentación lista (`.gitignore`, `README.md`, `DEPLOY.md`, `evidencia/`, ZIP); faltan los pasos de Easypanel y las capturas.
 
-**Próximo change**: `C-04` (`04-alta-libros`). El catálogo ya muestra el detalle de autores; el libro se crea con al menos un autoría (rol `orden`).
+**Próximo change**: `C-10` (`10-despliegue-easypanel`) — tareas manuales en Easypanel (servicios, base, dominio) y verificación G-01 a G-07. Ver `DEPLOY.md`.
 
-Para arrancar: `/opsx:propose 04-alta-libros`
+Para arrancar: resolver las preguntas abiertas de prioridad Alta y seguir `DEPLOY.md` (secciones 3 y 4).
 
 ---
 

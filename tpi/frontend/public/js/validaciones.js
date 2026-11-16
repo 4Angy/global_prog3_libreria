@@ -5,8 +5,8 @@
    Change 06 · Ejercicio 5: venta simulada e historial
 
    Responsabilidad: las reglas puras de la aplicación. Cada función recibe lo
-   que se leyó del formulario y el contexto contra el cual comparar, y
-   devuelve si los datos son válidos y qué reglas no se cumplieron.
+   que se leyó del formulario y devuelve si los datos son válidos y qué reglas
+   no se cumplieron.
 
    Este archivo no toca el DOM ni el estado vivo, y no depende de ningún otro
    módulo: se puede ejercitar con Node pasándole colecciones a mano.
@@ -43,11 +43,6 @@ function textoDe(valor) {
 }
 
 /* --- Normalización --------------------------------------------------------- */
-
-/** Quita todos los espacios y guiones de un ISBN, para poder compararlo. */
-function normalizarIsbn(texto) {
-  return textoDe(texto).replace(/[\s-]/g, "");
-}
 
 /** Recorta los extremos de un email y lo pasa a minúsculas, para compararlo. */
 function normalizarEmail(texto) {
@@ -110,41 +105,6 @@ function leerPrecio(texto) {
     return null;
   }
   return Number(limpio.replace(",", "."));
-}
-
-/* --- Comparaciones con el conjunto local ----------------------------------- */
-
-/** Indica si ya existe un libro con ese ISBN, comparado sin espacios ni guiones. */
-function existeIsbnEn(libros, isbn) {
-  const buscado = normalizarIsbn(isbn);
-  return (libros || []).some((libro) => normalizarIsbn(libro.isbn) === buscado);
-}
-
-/** Indica si ya existe un cliente con ese email, comparado sin espacios ni mayúsculas. */
-function existeEmailEn(clientes, email) {
-  const buscado = normalizarEmail(email);
-  return (clientes || []).some((cliente) => normalizarEmail(cliente.email) === buscado);
-}
-
-/** Indica si la editorial indicada existe en el conjunto local. */
-function existeEditorialEn(editoriales, idEditorial) {
-  if (!idEditorial) {
-    return false;
-  }
-  return (editoriales || []).some((editorial) => editorial.id === idEditorial);
-}
-
-/** Indica si el género indicado existe en el conjunto local. */
-function existeGeneroEn(generos, idGenero) {
-  if (!idGenero) {
-    return false;
-  }
-  return (generos || []).some((genero) => genero.id === idGenero);
-}
-
-/** Indica si el autor indicado existe en el conjunto local. */
-function existeAutorEn(autores, idAutor) {
-  return (autores || []).some((autor) => autor.id === idAutor);
 }
 
 /* --- Validación del alta de libro ------------------------------------------ */

@@ -1,6 +1,6 @@
 # Librería ABC — frontend integrado a la API (Global · Programación III)
 
-Frontend del Parcial 1 (HTML, CSS y JavaScript nativos) conectado a la API REST
+**Grupo:** Super logicas — Herrera Julieta y Zalazar María de los Ángeles.
 del Parcial 2 (FastAPI + PostgreSQL), servido por Nginx con el prefijo `/api`
 publicado en el mismo origen.
 
@@ -102,7 +102,36 @@ con código de salida 0. Se puede volver a ejecutar sin duplicar registros.
 
 ## 5. Servir el frontend con Nginx
 
-Desde `frontend/`, con el backend en el puerto `8000`:
+Desde `frontend/`, con el backend en el puerto `8000`, construí la imagen y ejecutala:
+
+```bash
+docker build -t libreria-frontend .
+docker run --rm --name libreria-frontend \
+  -p 127.0.0.1:8080:80 \
+  -e API_UPSTREAM=host.docker.internal:8000 \
+  libreria-frontend
+```
+
+Sin cortes de línea (PowerShell, todo en una sola línea):
+
+```bash
+docker build -t libreria-frontend .
+docker run --rm --name libreria-frontend -p 127.0.0.1:8080:80 -e API_UPSTREAM=host.docker.internal:8000 libreria-frontend
+```
+
+Notas del comando:
+
+- `NGINX_ENVSUBST_FILTER` ya está fijado en el `Dockerfile` (`^API_UPSTREAM$`), así que no hace
+  falta pasarlo al ejecutar. Limita la sustitución de variables a `API_UPSTREAM`. Sin ese filtro,
+  la imagen de Nginx intentaría reemplazar también `$uri`, que es una variable propia de Nginx.
+- `API_UPSTREAM` es el host y puerto del backend, sin esquema ni barra final. Desde el
+  contenedor, el host se alcanza como `host.docker.internal` (Docker Desktop); en Docker de
+  Linux hay que agregar `--add-host=host.docker.internal:host-gateway`.
+- En Docker Desktop omití `--add-host`; en PowerShell poné el segundo comando en una línea y
+  quitá las barras invertidas.
+
+Para desarrollo sin reconstruir la imagen, se puede seguir usando la imagen base de Nginx con
+volúmenes:
 
 ```bash
 docker run --rm -p 127.0.0.1:8080:80 ^
@@ -113,26 +142,8 @@ docker run --rm -p 127.0.0.1:8080:80 ^
   nginx:1.30-alpine
 ```
 
-Sin cortes de línea:
-
-```bash
-docker run --rm -p 127.0.0.1:8080:80 -v "%CD%\public:/usr/share/nginx/html:ro" -v "%CD%\default.conf.template:/etc/nginx/templates/default.conf.template:ro" -e NGINX_ENVSUBST_FILTER=^API_UPSTREAM$ -e API_UPSTREAM=host.docker.internal:8000 nginx:1.30-alpine
-```
-
-Notas del comando:
-
-- `NGINX_ENVSUBST_FILTER=^API_UPSTREAM$` limita la sustitución de variables a
-  `API_UPSTREAM`. Sin ese filtro, la imagen de Nginx intentaría reemplazar
-  también `$uri`, que es una variable propia de Nginx.
-- `API_UPSTREAM` es el host y puerto del backend, sin esquema ni barra final.
-  Desde el contenedor, el host se alcanza como `host.docker.internal` (Docker
-  Desktop); en Docker de Linux hay que agregar
-  `--add-host=host.docker.internal:host-gateway`.
-- El comando está escrito para `cmd.exe`: el `^` corta la línea y `%CD%` es la
-  carpeta actual. En PowerShell, usá `` ` `` para cortar la línea y `${PWD}` en
-  lugar de `%CD%`.
-- La plantilla montada en `/etc/nginx/templates/` se procesa al arrancar el
-  contenedor y genera `/etc/nginx/conf.d/default.conf`.
+La plantilla montada en `/etc/nginx/templates/` se procesa al arrancar el
+contenedor y genera `/etc/nginx/conf.d/default.conf`.
 
 Después, abrí <http://127.0.0.1:8080/>.
 
@@ -235,8 +246,18 @@ Los errores son siempre `ErrorApi` y traen `estado` (código HTTP), `mensaje`
 ## Estado del change
 
 Este README corresponde a los changes `01-cliente-http`, `02-catalogo-listado`,
-`03-catalogo-detalle`, `04-alta-libros` y `05-alta-clientes`: el cliente HTTP,
-el proxy, el catálogo (búsqueda, paginación y detalle) y las altas de libros y
-de clientes integradas a la API. Las demás pantallas (Ventas e Historial)
-siguen usando `localStorage` hasta que los changes `06` y `07` migren cada una
-a la API.
+`03-catalogo-detalle`, `04-alta-libros`, `05-alta-clientes`, `06-ventas` y
+`07-historial-ventas`: el cliente HTTP, el proxy, el catálogo (búsqueda,
+paginación y detalle), las altas de libros y clientes, el registro de ventas y
+el historial con su detalle. Las cinco pantallas usan la API: no queda código
+que lea o escriba `localStorage`.
+
+El listado del historial se ordena por `id` ascendente, así que las ventas más
+nuevas quedan en la última página. El comprobante de una venta recién
+registrada enlaza directo a su detalle (`historial.html?venta={id}`), que
+también se puede abrir desde la tabla.
+
+El esquema de PostgreSQL se versiona con Alembic (`backend/migrations/`): una
+base nueva se prepara con `alembic upgrade head` (el contenedor del backend lo
+hace al arrancar) y una base ya creada con `create_all` se marca con
+`alembic stamp head`. Ver `backend/README.md`, sección «Migraciones».

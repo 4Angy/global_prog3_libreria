@@ -4,8 +4,7 @@
 
    Responsabilidad: pedir a la API la página visible del catálogo, dibujar sus
    filas como texto y resolver los estados de la vista (cargando, vacío, sin
-   coincidencias, sin más resultados y error). Reemplaza a `catalogo.js` y a
-   `inicio.js` solo en `index.html`.
+   coincidencias, sin más resultados y error).
 
    Estado en memoria: `{ titulo, offset, limit }`. La API no informa el total,
    así que «Siguiente» se habilita únicamente cuando la página vino completa.

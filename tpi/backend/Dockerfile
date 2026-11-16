@@ -25,5 +25,6 @@ EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
   CMD wget -qO- http://127.0.0.1:8000/health/ready || exit 1
 
-# La aplicación crea sus tablas al arrancar (create_all en el lifespan).
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# La migración de Alembic crea las tablas al arrancar; la aplicación ya no
+# las crea con create_all (ver app/main.py, lifespan).
+CMD ["sh", "-c", "alembic upgrade head && exec uvicorn app.main:app --host 0.0.0.0 --port 8000"]

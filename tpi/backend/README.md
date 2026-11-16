@@ -62,8 +62,8 @@ falta, la aplicación falla al arrancar y no queda sirviendo.
    `host.docker.internal` (no `localhost`: dentro del contenedor `localhost` es
    el propio contenedor).
 
-3. Cargar los datos iniciales (una sola vez; el esquema lo crea la aplicación al
-   arrancar):
+3. Cargar los datos iniciales (una sola vez; el esquema lo crea la migración
+   al arrancar el contenedor):
 
    ```bash
    docker exec libreria python scripts/datos_iniciales.py
@@ -84,6 +84,17 @@ python -m venv .venv
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
+
+## Migraciones (Alembic)
+
+El esquema se versiona con Alembic y se aplica al arrancar el contenedor
+(`alembic upgrade head`). Para una base nueva no hay que hacer nada extra.
+
+- Base nueva: `alembic upgrade head` (o dejar que el contenedor lo haga).
+- Base ya creada con `create_all`: `alembic stamp head` para marcarla como
+  migrada sin volver a crear tablas.
+- Verificar: `alembic current` muestra la revision actual y `alembic check`
+  no debe detectar diferencias con los modelos.
 
 ## Documentación de la API
 

@@ -1,0 +1,30 @@
+# Secretos y entorno
+.env
+.env.*
+!.env.example
+
+# Entornos virtuales
+.venv/
+venv/
+ENV/
+
+# Bytecode y caches
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Dependencias de Node (si se usan en el futuro)
+node_modules/
+
+# Sistema y editor
+.DS_Store
+.idea/
+.vscode/
+Thumbs.db
+desktop.ini
+
+# Entregable
+*.zip

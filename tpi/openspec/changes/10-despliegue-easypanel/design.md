@@ -19,11 +19,12 @@
 ## Decisions
 
 1. **Un solo repositorio** con `frontend/` y `backend/` en la raíz, como pide la guía.
-2. **Backend sin dominio:** si Easypanel le asigna uno automático, se quita.
-3. **Carga inicial desde Shell del backend:** `python scripts/datos_iniciales.py`, que no escribe si la base ya tiene datos.
-4. **Evidencia:** `evidencia/G-0X-*.png` con capturas de la pantalla y de la pestaña Red, y una tabla en `DEPLOY.md` con paso, resultado esperado, resultado observado y archivo.
-5. **G-05 (precio histórico):** el `PATCH /libros/{id}` se hace desde la consola del navegador en la URL pública con `Api.patch`, porque el frontend no tiene pantalla de edición.
-6. **G-07 (persistencia):** se redespliegan los dos servicios y se vuelve a abrir una venta ya registrada.
+2. **Se reutiliza el backend ya desplegado** (proyecto `app_grupo3`, servicio `libreria_backend`, base `db_libreria`): se cambia su fuente al repositorio del grupo y el Build Path a `/tpi/backend`. La base se recrea para que `alembic upgrade head` la cree desde cero y `scripts/datos_iniciales.py` cargue la semilla limpia; la alternativa conservadora es `alembic stamp head` sobre la base existente.
+3. **Backend sin dominio:** si Easypanel le asigna uno automático, se quita.
+4. **Carga inicial desde Shell del backend:** `python scripts/datos_iniciales.py`, que no escribe si la base ya tiene datos.
+5. **Evidencia:** `evidencia/G-0X-*.png` con capturas de la pantalla y de la pestaña Red, y una tabla en `DEPLOY.md` con paso, resultado esperado, resultado observado y archivo.
+6. **G-05 (precio histórico):** el `PATCH /libros/{id}` se hace desde la consola del navegador en la URL pública con `Api.patch`, porque el frontend no tiene pantalla de edición.
+7. **G-07 (persistencia):** se redespliegan los dos servicios y se vuelve a abrir una venta ya registrada.
 
 ## Risks / Trade-offs
 
