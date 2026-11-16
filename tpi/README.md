@@ -197,6 +197,27 @@ conservando los datos cargados. La tabla «Libros registrados en esta sesión»
 muestra los libros que devolvió el 201 del alta en esta página; el catálogo
 completo está en `index.html`.
 
+## Alta de clientes: búsqueda por ID
+
+El formulario de alta (`frontend/public/clientes.html`) envía `POST /clientes/`
+con nombre y email. La API no tiene un listado de clientes (`GET /clientes/`
+no existe), así que **los clientes se buscan por ID**:
+
+- **Alta**: con el 201 se muestra el ID asignado —hace falta para la venta—,
+  el cliente se agrega a la tabla «Clientes registrados en esta sesión» y el
+  formulario se limpia. El botón «Registrar cliente» queda deshabilitado
+  mientras dura el envío.
+- **Email repetido**: la API responde 409 «Ya existe un cliente con ese
+  correo.»; el mensaje del servidor se muestra junto al formulario conservando
+  los datos cargados (lo mismo ante un 422). El navegador solo exige nombre no
+  vacío y formato de email (`validarCliente` en `js/validaciones.js`): la
+  unicidad del correo la decide la API.
+- **Búsqueda por ID**: la sección «Buscar cliente por ID» consulta
+  `GET /clientes/{id}` y muestra nombre y email. El ID debe ser un entero
+  positivo; si no existe, la API responde 404 «El cliente no existe.».
+- La tabla de la sesión vive en memoria y se pierde al recargar la página; los
+  clientes siguen en la API y se encuentran por ID.
+
 ## Uso del cliente HTTP en la consola
 
 Con las páginas servidas en `:8080`, el cliente queda disponible como global
@@ -214,7 +235,8 @@ Los errores son siempre `ErrorApi` y traen `estado` (código HTTP), `mensaje`
 ## Estado del change
 
 Este README corresponde a los changes `01-cliente-http`, `02-catalogo-listado`,
-`03-catalogo-detalle` y `04-alta-libros`: el cliente HTTP, el proxy, el
-catálogo (búsqueda, paginación y detalle) y el alta de libros integrado a la
-API. Las demás pantallas (Clientes, Ventas e Historial) siguen usando
-`localStorage` hasta que los changes `05` a `07` migren cada una a la API.
+`03-catalogo-detalle`, `04-alta-libros` y `05-alta-clientes`: el cliente HTTP,
+el proxy, el catálogo (búsqueda, paginación y detalle) y las altas de libros y
+de clientes integradas a la API. Las demás pantallas (Ventas e Historial)
+siguen usando `localStorage` hasta que los changes `06` y `07` migren cada una
+a la API.

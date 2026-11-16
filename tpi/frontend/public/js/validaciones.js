@@ -1,7 +1,7 @@
 /* ============================================================================
    Librería ABC — reglas de validación
    Change 04 · Ejercicio 2: alta de libros contra la API (sin estado local, con stock y autorías)
-   Change 05 · Ejercicio 4: alta de libros y clientes
+   Change 05 · Ejercicio 4: alta de clientes contra la API (sin estado local)
    Change 06 · Ejercicio 5: venta simulada e historial
 
    Responsabilidad: las reglas puras de la aplicación. Cada función recibe lo
@@ -209,16 +209,15 @@ function validarLibro(datos) {
 /**
  * Comprueba los datos de un cliente contra las reglas del Ejercicio 4.
  *
- * `datos` trae el nombre y el email leídos del formulario.
- * `contexto` trae la colección local de clientes.
+ * `datos` trae el nombre y el email leídos del formulario. El navegador no
+ * compara contra colecciones locales: el email repetido lo decide la API.
  *
  * Devuelve `{ ok, errores }`, con un mensaje completo por cada regla
  * incumplida.
  */
-function validarCliente(datos, contexto) {
+function validarCliente(datos) {
   const errores = [];
   const valores = datos || {};
-  const conjunto = contexto || {};
 
   if (textoDe(valores.nombre).trim() === "") {
     errores.push("Ingresá el nombre completo del cliente.");
@@ -229,8 +228,6 @@ function validarCliente(datos, contexto) {
     errores.push("Ingresá el correo electrónico del cliente.");
   } else if (!esEmailValido(email)) {
     errores.push("El correo electrónico no tiene un formato válido.");
-  } else if (existeEmailEn(conjunto.clientes, email)) {
-    errores.push("Ya existe un cliente con ese correo electrónico.");
   }
 
   return { ok: errores.length === 0, errores: errores };

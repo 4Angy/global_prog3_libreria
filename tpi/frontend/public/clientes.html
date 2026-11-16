@@ -56,15 +56,47 @@
     </section>
 
     <section class="tarjeta">
-      <h2>Clientes registrados</h2>
+      <h2>Buscar cliente por ID</h2>
 
-      <p id="clientes-estado-vacio" class="estado-vacio" hidden>No hay clientes registrados.</p>
+      <p id="clientes-busqueda-error" class="mensaje mensaje--error" role="alert" hidden></p>
+
+      <form id="clientes-form-buscar" class="formulario" novalidate>
+        <fieldset>
+          <legend>Buscar un cliente</legend>
+
+          <p class="campo">
+            <label for="cliente-buscar-id">ID del cliente</label>
+            <input type="text" id="cliente-buscar-id" name="id" inputmode="numeric">
+            <small>La API no tiene un listado de clientes: ingresá el ID que mostró el alta.</small>
+          </p>
+        </fieldset>
+
+        <button type="submit" id="clientes-boton-buscar" class="boton boton--primario">Buscar</button>
+      </form>
+
+      <div id="clientes-busqueda-resultado" aria-live="polite" hidden>
+        <dl class="lista-detalle">
+          <dt>ID</dt>
+          <dd id="clientes-busqueda-id"></dd>
+          <dt>Nombre completo</dt>
+          <dd id="clientes-busqueda-nombre"></dd>
+          <dt>Correo electrónico</dt>
+          <dd id="clientes-busqueda-email"></dd>
+        </dl>
+      </div>
+    </section>
+
+    <section class="tarjeta">
+      <h2>Clientes registrados en esta sesión</h2>
+
+      <p id="clientes-estado-vacio" class="estado-vacio" hidden>Todavía no registraste clientes en esta sesión.</p>
 
       <div class="tabla-desplazable">
-        <table id="clientes-tabla" class="tabla">
-          <caption>Clientes registrados</caption>
+        <table id="clientes-tabla" class="tabla tabla--compacta">
+          <caption>Clientes registrados en esta sesión</caption>
           <thead>
             <tr>
+              <th scope="col">ID</th>
               <th scope="col">Nombre completo</th>
               <th scope="col">Correo electrónico</th>
             </tr>
@@ -77,12 +109,7 @@
 
   <script src="js/formato.js"></script>
   <script src="js/api.js"></script>
-  <script src="js/datos-iniciales.js"></script>
-  <script src="js/persistencia.js"></script>
-  <script src="js/datos.js"></script>
   <script src="js/validaciones.js"></script>
-  <script src="js/catalogo.js"></script>
-  <script src="js/altas.js"></script>
-  <script src="js/inicio.js"></script>
+  <script src="js/vista-clientes.js"></script>
 </body>
 </html>
