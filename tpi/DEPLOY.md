@@ -7,14 +7,15 @@
 
 | Campo | Valor |
 |---|---|
-| Proyecto Easypanel | `<PROYECTO>` (p. ej. `app_grupo3`) |
-| Servicio backend | `<PROYECTO>_backend` (p. ej. `app_grupo3_libreria_backend`) |
-| Servicio frontend | `<PROYECTO>_frontend` (p. ej. `app_grupo3_libreria_frontend`) |
-| Base PostgreSQL | `<BASE>` (p. ej. `db_libreria`) |
-| URL pública | `https://<DOMINIO>` |
+| Proyecto Easypanel | `app_grupo3` |
+| Servicio backend | `app_grupo3_libreria_backend` |
+| Servicio frontend | `app_grupo3_libreria_frontend` |
+| Base PostgreSQL | `db_libreria1` (base nueva; la anterior `db_libreria` queda sin uso) |
+| URL pública | `https://libreria.julietaherrera.me` |
 | Repositorio Git | `https://github.com/4Angy/global_prog3_libreria.git` (rama `master`) |
 | Revisión desplegada | `<COMMIT>` |
 | Fecha de despliegue | `<FECHA>` |
+| Estrategia de base | Base nueva `db_libreria1` creada desde cero; la migración `6bae92884578` creó el esquema (la base anterior `db_libreria` queda sin uso) |
 
 ## 2. Estructura del repositorio
 
@@ -64,8 +65,7 @@ global_prog3_libreria/   <- raíz del repo (Easypanel clona esto)
 
 - **Tipo:** App (Dockerfile).
 - **Build Path:** `/tpi/frontend`.
-- **Variable de entorno:** `API_UPSTREAM=<proyecto>_backend:8000` (nombre interno del
-  backend en la red de Easypanel, sin esquema ni barra final).
+- **Variable de entorno:** `API_UPSTREAM=app_grupo3_libreria_backend:8000` (nombre interno del backend en la red de Easypanel, sin esquema ni barra final).
 - **Dominio:** HTTPS → puerto 80 (el que se usa para la entrega).
 - **Proxy:** Nginx reenvía `/api/...` a `http://${API_UPSTREAM}/...`, quitando el
   prefijo `/api`.
@@ -93,19 +93,19 @@ Nunca se versionan `.env` ni credenciales: se cargan en el entorno privado del s
 2. En Easypanel, redesplegar el servicio `backend` (y, si cambió el frontend, el
    `frontend`).
 3. Revisar los logs: la migración debe aplicarse y Uvicorn debe iniciar.
-4. Verificar `https://<DOMINIO>/api/health/ready` (200) y el catálogo.
+4. Verificar `https://libreria.julietaherrera.me/api/health/ready` (200) y el catálogo.
 
 ## 8. Verificación (casos G-01 a G-07)
 
 | Caso | Pasos | Resultado esperado | Resultado observado | Evidencia |
 |---|---|---|---|---|
-| G-01 | Abrir `https://<DOMINIO>/` y revisar el catálogo | Listado con libros, búsqueda y paginación, sin errores en consola | | `evidencia/G-01-catalogo.png` |
-| G-02 | Alta de un libro con autorías | 201 y fila en la tabla de la sesión | | `evidencia/G-02-alta-libro.png` |
-| G-03 | Alta de un cliente y búsqueda por ID | 201 con ID y resultado de la búsqueda | | `evidencia/G-03-alta-cliente.png` |
-| G-04 | Registrar una venta de dos renglones y reabrir el detalle tras recargar | Comprobante con importes de la API y detalle idéntico tras recargar | | `evidencia/G-04-venta-historial.png` |
-| G-05 | `PATCH /libros/{id}` con nuevo precio y reabrir el detalle | El detalle conserva el precio unitario y el total originales | | `evidencia/G-05-precio-historico.png` |
-| G-06 | Venta con cliente o libro inexistente (409) y renglones repetidos (422) | Mensaje del servidor y borrador intacto | | `evidencia/G-06-rechazo.png` |
-| G-07 | Redesplegar ambos servicios y reabrir una venta ya registrada | Datos presentes, HTTPS, salud 200 | | `evidencia/G-07-persistencia.png` |
+| G-01 | Abrir `https://libreria.julietaherrera.me/` y revisar el catálogo | Listado con libros, búsqueda y paginación, sin errores en consola | Catálogo con 9 libros, filtro por título (ej. "hobbit") y paginación; consola sin errores | `evidencia/G-01-catalogo.png`, `evidencia/G-01-catalogo-busqueda.png` |
+| G-02 | Alta de un libro con autorías | 201 y fila en la tabla de la sesión | Alta exitosa con ID asignado por la API y fila en "Libros registrados en esta sesión"; `POST /api/libros/` → 201 | `evidencia/G-02-alta-libro.png` |
+| G-03 | Alta de un cliente y búsqueda por ID | 201 con ID y resultado de la búsqueda | Alta exitosa (cliente "Chicho Vove", ID 5) y búsqueda por ID con nombre y email; `POST` 201, `GET` 200 | `evidencia/G-03-alta-cliente.png` |
+| G-04 | Registrar una venta de dos renglones y reabrir el detalle tras recargar | Comprobante con importes de la API y detalle idéntico tras recargar | Venta registrada (2 renglones: El Hobbit x2 + Rayuela x1); comprobante con precios unitarios y total de la API; borrador vacío; detalle idéntico tras recargar con `?venta={id}` | `evidencia/G-04-venta-historial.png` |
+| G-05 | `PATCH /libros/{id}` con nuevo precio y reabrir el detalle | El detalle conserva el precio unitario y el total originales | Tras cambiar el precio de "El Hobbit" a $30.000, el detalle sigue mostrando $21.900,00 y el total original; precio restaurado a $21.900 | `evidencia/G-05-precio-historico.png` |
+| G-06 | Venta con cliente o libro inexistente (409) y renglones repetidos (422) | Mensaje del servidor y borrador intacto | 409: "La referencia indicada no existe." con borrador intacto. 422: "No se puede repetir un libro en dos renglones de la misma venta." con borrador intacto | `evidencia/G-06-rechazo.png`, `evidencia/G-06-rechazo-422.png` |
+| G-07 | Redesplegar ambos servicios y reabrir una venta ya registrada | Datos presentes, HTTPS, salud 200 | Tras redesplegar, `/api/health/ready` → 200; venta 3 (Chicho Vove) con importes correctos ($72.300,00); consola sin errores | `evidencia/G-07-persistencia.png`, `evidencia/G-07-salud.png` |
 
 ## 9. Diagnóstico
 

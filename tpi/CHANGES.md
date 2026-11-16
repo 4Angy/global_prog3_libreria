@@ -313,7 +313,7 @@ Paso │ Agente A (Catálogo y altas)      │ Agente B (Backend e infraestructu
 ## FASE 5 — Despliegue en producción (Ej. 5)
 
 ### [C-10] `10-despliegue-easypanel`
-- **Estado**: `[ ]` pendiente — parte de código/docs lista (1.1, 4.1, 4.2); tareas 2.1, 2.2, 3.1 y 3.2 requieren Easypanel y la URL pública
+- **Estado**: `[x]` archivado el 2026-11-16 (`openspec/changes/archive/2026-11-16-10-despliegue-easypanel`); spec sincronizada a `openspec/specs/despliegue/spec.md`
 - **Scope**: Publicación de ambos servicios, evidencia G-01..G-07 y entrega (US-010)
   - `.gitignore` raíz (`.env`, `.env.*`, `.venv`, `__pycache__`, `.pytest_cache`, `node_modules`) e inicialización/subida del repo con `frontend/`, `backend/`, `README.md`, `DEPLOY.md` y `evidencia/`; verificar con `git ls-files` que no hay `.env`.
   - Servicio Easypanel `backend`: Build Path `/backend`, Dockerfile, `DATABASE_URL=postgresql+asyncpg://…`; sin dominio público; logs con `alembic upgrade head`; salud 200 desde el Shell y carga con `python scripts/datos_iniciales.py`.
@@ -348,11 +348,9 @@ Paso │ Agente A (Catálogo y altas)      │ Agente B (Backend e infraestructu
 | C-09 | `09-backend-alembic` | 4 — Migraciones | — | ALTO | Ej. 5 · US-009 |
 | C-10 | `10-despliegue-easypanel` | 5 — Despliegue | C-08, C-09 | ALTO | Ej. 5 · US-010 |
 
-**Cambios completados**: `C-01` a `C-09` archivados (`C-01`–`C-03` el 2026-11-15; `C-04`–`C-09` el 2026-11-16). `C-10` tiene la parte de código y documentación lista (`.gitignore`, `README.md`, `DEPLOY.md`, `evidencia/`, ZIP); faltan los pasos de Easypanel y las capturas.
+**Cambios completados**: `C-01` a `C-10` archivados (`C-01`–`C-03` el 2026-11-15; `C-04`–`C-10` el 2026-11-16). El TP está completo: frontend integrado a la API, imagen Docker, backend con Alembic y despliegue en Easypanel (`https://libreria.julietaherrera.me`).
 
-**Próximo change**: `C-10` (`10-despliegue-easypanel`) — tareas manuales en Easypanel (servicios, base, dominio) y verificación G-01 a G-07. Ver `DEPLOY.md`.
-
-Para arrancar: resolver las preguntas abiertas de prioridad Alta y seguir `DEPLOY.md` (secciones 3 y 4).
+No quedan changes activos. El TP está cerrado.
 
 ---
 
