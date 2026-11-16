@@ -295,6 +295,11 @@ function agregarFilaSesion(libro) {
   document.getElementById("libros-estado-vacio").hidden = true;
 }
 
+/** Muestra el estado vacío cuando todavía no se registró ningún libro. */
+function actualizarEstadoVacio() {
+  document.getElementById("libros-estado-vacio").hidden = librosSesion.length > 0;
+}
+
 /* --- Envío del formulario ------------------------------------------------------- */
 
 /** Atiende el envío del alta de libro. */
@@ -402,6 +407,7 @@ function iniciarVistaLibros() {
   document
     .getElementById("libros-boton-reintentar-opciones")
     .addEventListener("click", cargarOpciones);
+  actualizarEstadoVacio();
   cargarOpciones();
 }
 
